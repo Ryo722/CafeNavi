@@ -3,6 +3,7 @@ import { HomePage } from "../pages/HomePage";
 import { QuestionnairePage } from "../pages/QuestionnairePage";
 import { ResultPage } from "../pages/ResultPage";
 import { GuidePage } from "../pages/GuidePage";
+import { HistoryPage } from "../pages/HistoryPage";
 import { AppLayout } from "./AppLayout";
 
 export const router = createHashRouter([
@@ -13,6 +14,7 @@ export const router = createHashRouter([
       { path: "/questionnaire", element: <QuestionnairePage /> },
       { path: "/result", element: <ResultPage /> },
       { path: "/guide", element: <GuidePage /> },
+      { path: "/history", element: <HistoryPage /> },
     ],
   },
 ]);

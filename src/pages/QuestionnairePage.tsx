@@ -99,7 +99,7 @@ export function QuestionnairePage() {
       // Run diagnosis
       const result = getFullRecommendation(input);
       const userProfile = calculateUserFlavorProfile(input);
-      navigate("/result", { state: { result, userProfile, input } });
+      navigate("/result", { state: { result, userProfile, input, mode } });
     } else {
       setCurrentIndex((i) => i + 1);
     }

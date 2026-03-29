@@ -5,6 +5,7 @@ const navLinks = [
   { to: "/", label: "Home" },
   { to: "/questionnaire", label: "Questionnaire" },
   { to: "/guide", label: "Guide" },
+  { to: "/history", label: "History" },
 ];
 
 export function Header() {

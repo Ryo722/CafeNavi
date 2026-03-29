@@ -1,7 +1,8 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
 import type { RecommendationResult, FlavorScores } from "../types/coffee";
 import type { TasteProfileInput } from "../types/questionnaire";
+import type { UserMode } from "../types/questionnaire";
 import { coffeeProfiles } from "../data/coffeeProfiles";
 import { Button } from "../components/ui/Button";
 import { CoffeeCard } from "../components/result/CoffeeCard";
@@ -9,23 +10,50 @@ import { BrewingRecommendation } from "../components/result/BrewingRecommendatio
 import { PairingList } from "../components/result/PairingList";
 import { FlavorRadarChart } from "../components/charts/FlavorRadarChart";
 import { Card } from "../components/ui/Card";
+import { saveDiagnosis } from "../lib/storage";
+import type { DiagnosisRecord } from "../lib/storage";
 
 type LocationState = {
   result: RecommendationResult;
   userProfile: FlavorScores;
   input: TasteProfileInput;
+  mode?: UserMode;
+  /** 履歴から閲覧する場合にセットされる */
+  fromHistory?: boolean;
 };
 
 export function ResultPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const state = location.state as LocationState | null;
+  const [saved, setSaved] = useState(false);
+  const savedRef = useRef(false);
 
   useEffect(() => {
     if (!state) {
       navigate("/", { replace: true });
     }
   }, [state, navigate]);
+
+  // 自動保存（履歴からの閲覧時は保存しない）
+  useEffect(() => {
+    if (!state || state.fromHistory || savedRef.current) return;
+    savedRef.current = true;
+
+    const record: DiagnosisRecord = {
+      id: String(Date.now()),
+      date: new Date().toISOString(),
+      mode: state.mode ?? "beginner",
+      input: state.input,
+      result: state.result,
+      userFlavorProfile: state.userProfile,
+    };
+    saveDiagnosis(record);
+    setSaved(true);
+
+    const timer = setTimeout(() => setSaved(false), 3000);
+    return () => clearTimeout(timer);
+  }, [state]);
 
   if (!state) return null;
 
@@ -48,6 +76,16 @@ export function ResultPage() {
         <p className="text-sm text-stone-500">
           あなたにぴったりのコーヒーが見つかりました
         </p>
+        {saved && (
+          <p className="mt-2 text-xs text-cafe-600 animate-pulse">
+            履歴に保存しました
+          </p>
+        )}
+        {state.fromHistory && (
+          <p className="mt-2 text-xs text-stone-400">
+            保存済みの診断結果
+          </p>
+        )}
       </div>
 
       {/* Top matches */}
@@ -142,6 +180,13 @@ export function ResultPage() {
           className="w-full"
         >
           コーヒーガイドを見る
+        </Button>
+        <Button
+          variant="ghost"
+          onClick={() => navigate("/history")}
+          className="w-full"
+        >
+          診断履歴を見る
         </Button>
       </div>
     </div>
