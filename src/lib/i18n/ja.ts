@@ -447,6 +447,30 @@ export const ja: Translations = {
   "avoid.strongRoast":
     "焙煎感の強い深煎りコーヒーは避けた方が良いでしょう",
 
+  // compare
+  "compare.title": "診断結果を比較",
+  "compare.selectTwo": "2件の診断結果を選んでください",
+  "compare.compare": "比較する",
+  "compare.reselect": "選び直す",
+  "compare.diagnosis1": "診断1",
+  "compare.diagnosis2": "診断2",
+  "compare.noHistory": "比較するには2件以上の診断が必要です",
+  "compare.differences": "違いのある項目",
+  "compare.same": "同じ",
+  "compare.date": "診断日時",
+  "compare.mode": "モード",
+  "compare.topCoffee": "おすすめ1位",
+  "compare.matchScore": "マッチ度",
+  "compare.flavorProfile": "味覚プロファイル",
+  "compare.roastLevel": "推薦焙煎度",
+  "compare.grindSize": "推薦挽き目",
+  "compare.brewingMethod": "推薦抽出方法",
+  "compare.pairings": "相性の良いお菓子",
+  "compare.selected": "{{count}}件選択中",
+  "compare.backHome": "ホームに戻る",
+  "nav.compare": "比較",
+  "history.compare": "比較する",
+
   // date format
   "date.format": "{{y}}年{{m}}月{{d}}日 {{h}}:{{min}}",
 };

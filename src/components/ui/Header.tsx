@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "../../lib/i18n";
+import { getDiagnosisHistory } from "../../lib/storage";
 import { LocaleToggle } from "./LocaleToggle";
 
 export function Header() {
@@ -8,11 +9,16 @@ export function Header() {
   const location = useLocation();
   const { t } = useTranslation();
 
+  const hasEnoughHistory = getDiagnosisHistory().length >= 2;
+
   const navLinks = [
     { to: "/", label: t("nav.home") },
     { to: "/questionnaire", label: t("nav.questionnaire") },
     { to: "/guide", label: t("nav.guide") },
     { to: "/history", label: t("nav.history") },
+    ...(hasEnoughHistory
+      ? [{ to: "/compare", label: t("nav.compare") }]
+      : []),
   ];
 
   return (

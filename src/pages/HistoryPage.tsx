@@ -146,6 +146,16 @@ export function HistoryPage() {
           </div>
 
           <div className="flex flex-col gap-3">
+            {history.length >= 2 && (
+              <Button
+                variant="secondary"
+                onClick={() => navigate("/compare")}
+                className="w-full"
+                size="sm"
+              >
+                {t("history.compare")}
+              </Button>
+            )}
             <Button
               variant="ghost"
               onClick={handleClearAll}
