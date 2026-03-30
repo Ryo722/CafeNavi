@@ -580,6 +580,28 @@ export const ja: Translations = {
   "stats.brewingDistribution": "抽出方法の分布",
   "stats.flavorTrend": "味覚の変遷",
   "stats.viewHistory": "診断履歴を見る",
+  "stats.tasteType": "あなたの味覚タイプ",
+  "stats.tasteTypeDistribution": "味覚タイプの分布",
+
+  // taste type
+  "tasteType.title": "あなたの味覚タイプ",
+  "tasteType.secondary": "サブタイプ",
+  "tasteType.fruity": "フルーティ派",
+  "tasteType.bitter": "ビター派",
+  "tasteType.choco-nut": "チョコ&ナッツ派",
+  "tasteType.floral": "フローラル派",
+  "tasteType.heavy-body": "ヘビーボディ派",
+  "tasteType.sweet": "スイート派",
+  "tasteType.balance": "バランス派",
+  "tasteType.clean": "クリーン派",
+  "tasteType.fruity.desc": "フルーツのような爽やかさを楽しむタイプ",
+  "tasteType.bitter.desc": "深い苦味とコクを愛するタイプ",
+  "tasteType.choco-nut.desc": "チョコやナッツの風味が好きなタイプ",
+  "tasteType.floral.desc": "繊細な花の香りを楽しむタイプ",
+  "tasteType.heavy-body.desc": "しっかりとした飲みごたえを求めるタイプ",
+  "tasteType.sweet.desc": "甘みのあるコーヒーを好むタイプ",
+  "tasteType.balance.desc": "バランスの良い万人向けタイプ",
+  "tasteType.clean.desc": "雑味のないクリアな味わいを好むタイプ",
 
   // seasonal
   "seasonal.title": "季節のおすすめ",
