@@ -28,6 +28,7 @@ body {
   color: var(--color-stone-800);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 300ms ease, color 200ms ease;
 }
 
 /* Custom slider styles */
@@ -100,6 +101,12 @@ input[type="range"]::-moz-range-thumb {
 @keyframes scaleIn {
   from { opacity: 0; transform: scale(0); }
   to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes bounce {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.2); }
+  100% { transform: scale(1); }
 }
 
 /* Page transition */
