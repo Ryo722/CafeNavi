@@ -1,7 +1,8 @@
 import { useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { getDiagnosisHistory } from "../lib/storage";
 import type { DiagnosisRecord } from "../lib/storage";
+import type { FlavorScores } from "../types/coffee";
 import { coffeeProfiles } from "../data/coffeeProfiles";
 import { Card } from "../components/ui/Card";
 import { Button } from "../components/ui/Button";
@@ -9,14 +10,38 @@ import { PageTransition } from "../components/ui/PageTransition";
 import { CompareRadarChart } from "../components/charts/CompareRadarChart";
 import { useTranslation } from "../lib/i18n";
 
+const flavorAxes: { key: keyof FlavorScores; labelKey: string }[] = [
+  { key: "bitterness", labelKey: "flavor.bitterness" },
+  { key: "acidity", labelKey: "flavor.acidity" },
+  { key: "sweetness", labelKey: "flavor.sweetness" },
+  { key: "body", labelKey: "flavor.body" },
+  { key: "fruitiness", labelKey: "flavor.fruitiness" },
+  { key: "floral", labelKey: "flavor.floral" },
+  { key: "nuttiness", labelKey: "flavor.nuttiness" },
+  { key: "chocolaty", labelKey: "flavor.chocolaty" },
+  { key: "roastiness", labelKey: "flavor.roastiness" },
+  { key: "cleanness", labelKey: "flavor.cleanness" },
+];
+
+const SIGNIFICANT_THRESHOLD = 2;
+
 type Phase = "select" | "compare";
 
 export function ComparePage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useTranslation();
   const [history] = useState<DiagnosisRecord[]>(getDiagnosisHistory);
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [phase, setPhase] = useState<Phase>("select");
+
+  const preselected = (location.state as { preselected?: string[] } | null)?.preselected;
+  const hasPreselected = Array.isArray(preselected) && preselected.length === 2;
+
+  const [selectedIds, setSelectedIds] = useState<string[]>(
+    hasPreselected ? preselected : [],
+  );
+  const [phase, setPhase] = useState<Phase>(
+    hasPreselected ? "compare" : "select",
+  );
 
   const formatDate = (iso: string): string => {
     const d = new Date(iso);
@@ -367,6 +392,69 @@ export function ComparePage() {
                   </div>
                   <div className="text-xs text-cafe-800 text-center break-words">
                     {row.value2}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </Card>
+
+        {/* Flavor score diff table */}
+        <Card className="mb-6 overflow-hidden">
+          <h2 className="text-base font-bold text-cafe-800 text-center mb-3">
+            {t("compare.flavorScores")}
+          </h2>
+          <div className="grid grid-cols-4 gap-1 pb-2 mb-2 border-b border-cafe-100 text-xs font-medium text-stone-400">
+            <div>{t("compare.axis")}</div>
+            <div className="text-center">{t("compare.diagnosis1")}</div>
+            <div className="text-center">{t("compare.diagnosis2")}</div>
+            <div className="text-center">{t("compare.change")}</div>
+          </div>
+          <div className="space-y-0">
+            {flavorAxes.map((axis) => {
+              const v1 = record1.userFlavorProfile[axis.key];
+              const v2 = record2.userFlavorProfile[axis.key];
+              const diff = v2 - v1;
+              const isSignificant = Math.abs(diff) >= SIGNIFICANT_THRESHOLD;
+              const arrow =
+                diff > 0
+                  ? t("compare.increase")
+                  : diff < 0
+                    ? t("compare.decrease")
+                    : t("compare.noChange");
+              return (
+                <div
+                  key={axis.key}
+                  className={`grid grid-cols-4 gap-1 py-2 border-b border-cafe-50 last:border-0 ${
+                    isSignificant ? "bg-amber-50/60" : ""
+                  }`}
+                >
+                  <div className="text-xs font-medium text-stone-600 flex items-center gap-1">
+                    {t(axis.labelKey)}
+                    {isSignificant && (
+                      <span className="text-amber-500 text-[10px]" title={t("compare.significantChange")}>
+                        *
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-xs text-cafe-800 text-center">{v1}</div>
+                  <div className="text-xs text-cafe-800 text-center">{v2}</div>
+                  <div
+                    className={`text-xs text-center font-medium ${
+                      diff > 0
+                        ? "text-green-600"
+                        : diff < 0
+                          ? "text-red-500"
+                          : "text-stone-400"
+                    }`}
+                  >
+                    {arrow}
+                    {diff !== 0 && (
+                      <span className="ml-0.5">
+                        {diff > 0 ? "+" : ""}
+                        {diff}
+                      </span>
+                    )}
                   </div>
                 </div>
               );
