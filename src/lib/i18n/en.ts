@@ -560,6 +560,13 @@ export const en: Translations = {
   "brewingGuide.noGuides": "No guides available for this roast level yet",
   "result.viewBrewingGuide": "See brewing guide for this roast",
 
+  // seasonal
+  "seasonal.title": "Seasonal Picks",
+  "seasonal.recommendedCoffees": "Recommended Coffees",
+  "seasonal.brewingMethods": "Recommended Brewing Methods",
+  "seasonal.pairings": "Seasonal Pairings",
+  "seasonal.moreLink": "Explore more coffees for this season",
+
   // date format
   "date.format": "{{m}}/{{d}}/{{y}} {{h}}:{{min}}",
 };

@@ -561,6 +561,13 @@ export const ja: Translations = {
   "brewingGuide.noGuides": "この焙煎度のガイドはまだありません",
   "result.viewBrewingGuide": "この焙煎度の淹れ方を見る",
 
+  // seasonal
+  "seasonal.title": "季節のおすすめ",
+  "seasonal.recommendedCoffees": "おすすめコーヒー",
+  "seasonal.brewingMethods": "おすすめ抽出方法",
+  "seasonal.pairings": "季節のペアリング",
+  "seasonal.moreLink": "この季節のコーヒーをもっと見る",
+
   // date format
   "date.format": "{{y}}年{{m}}月{{d}}日 {{h}}:{{min}}",
 };
