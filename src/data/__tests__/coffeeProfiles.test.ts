@@ -3,8 +3,8 @@ import { coffeeProfiles } from "../coffeeProfiles";
 import type { FlavorScores } from "../../types/coffee";
 
 describe("coffeeProfiles", () => {
-  it("プロファイルが10件あること", () => {
-    expect(coffeeProfiles).toHaveLength(10);
+  it("プロファイルが25件あること", () => {
+    expect(coffeeProfiles).toHaveLength(25);
   });
 
   it("各プロファイルのflavorScoresの値が1-10の範囲内であること", () => {
