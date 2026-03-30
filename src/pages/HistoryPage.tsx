@@ -9,39 +9,41 @@ import type { DiagnosisRecord } from "../lib/storage";
 import { coffeeProfiles } from "../data/coffeeProfiles";
 import { Card } from "../components/ui/Card";
 import { Button } from "../components/ui/Button";
-
-function formatDate(iso: string): string {
-  const d = new Date(iso);
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  const h = String(d.getHours()).padStart(2, "0");
-  const min = String(d.getMinutes()).padStart(2, "0");
-  return `${y}年${m}月${day}日 ${h}:${min}`;
-}
-
-function modeLabel(mode: DiagnosisRecord["mode"]): string {
-  return mode === "beginner" ? "かんたん" : "くわしく";
-}
+import { useTranslation } from "../lib/i18n";
 
 export function HistoryPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [history, setHistory] = useState<DiagnosisRecord[]>(
     getDiagnosisHistory,
   );
 
+  const formatDate = (iso: string): string => {
+    const d = new Date(iso);
+    const y = String(d.getFullYear());
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    const h = String(d.getHours()).padStart(2, "0");
+    const min = String(d.getMinutes()).padStart(2, "0");
+    return t("date.format", { y, m, d: day, h, min });
+  };
+
+  const modeLabel = (mode: DiagnosisRecord["mode"]): string => {
+    return mode === "beginner" ? t("history.beginner") : t("history.advanced");
+  };
+
   const handleDelete = useCallback((id: string) => {
-    if (!window.confirm("この診断履歴を削除しますか？")) return;
+    if (!window.confirm(t("history.confirmDelete"))) return;
     deleteDiagnosis(id);
     setHistory(getDiagnosisHistory());
-  }, []);
+  }, [t]);
 
   const handleClearAll = useCallback(() => {
-    if (!window.confirm("すべての診断履歴を削除しますか？この操作は取り消せません。"))
+    if (!window.confirm(t("history.confirmDeleteAll")))
       return;
     clearAllDiagnoses();
     setHistory([]);
-  }, []);
+  }, [t]);
 
   const handleView = useCallback(
     (record: DiagnosisRecord) => {
@@ -65,21 +67,21 @@ export function HistoryPage() {
           📋
         </p>
         <h1 className="text-2xl font-serif font-bold text-cafe-900 mb-1">
-          診断履歴
+          {t("history.title")}
         </h1>
         <p className="text-sm text-stone-500">
-          過去の診断結果を確認できます
+          {t("history.subtitle")}
         </p>
       </div>
 
       {history.length === 0 ? (
         <Card className="text-center py-12">
-          <p className="text-stone-400 text-lg mb-2">まだ診断履歴がありません</p>
+          <p className="text-stone-400 text-lg mb-2">{t("history.empty")}</p>
           <p className="text-stone-400 text-sm mb-6">
-            コーヒー診断を受けると、結果がここに保存されます
+            {t("history.emptyDesc")}
           </p>
           <Button onClick={() => navigate("/questionnaire")} size="sm">
-            診断を始める
+            {t("history.startDiagnosis")}
           </Button>
         </Card>
       ) : (
@@ -108,12 +110,14 @@ export function HistoryPage() {
                         </p>
                         {topCoffee && (
                           <p className="text-base font-bold text-cafe-800 truncate">
-                            {topCoffee.nameJa}
+                            {t(`coffee.${topCoffee.id}.name`)}
                           </p>
                         )}
                         {topMatch && (
                           <p className="text-sm text-stone-500">
-                            マッチ度: {Math.round(topMatch.score * 100)}%
+                            {t("history.matchScore", {
+                              score: String(Math.round(topMatch.score * 100)),
+                            })}
                           </p>
                         )}
                       </div>
@@ -131,7 +135,7 @@ export function HistoryPage() {
                         handleDelete(record.id);
                       }}
                     >
-                      削除
+                      {t("history.delete")}
                     </button>
                   </div>
                 </Card>
@@ -146,7 +150,7 @@ export function HistoryPage() {
               className="w-full text-red-500 hover:text-red-600"
               size="sm"
             >
-              すべての履歴を削除
+              {t("history.deleteAll")}
             </Button>
           </div>
         </>
@@ -159,7 +163,7 @@ export function HistoryPage() {
           className="w-full"
           size="sm"
         >
-          ホームに戻る
+          {t("history.backHome")}
         </Button>
       </div>
     </div>

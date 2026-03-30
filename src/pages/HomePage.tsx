@@ -1,9 +1,11 @@
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
+import { useTranslation } from "../lib/i18n";
 
 export function HomePage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <div className="max-w-lg mx-auto px-4 py-10">
@@ -13,10 +15,10 @@ export function HomePage() {
           ☕
         </p>
         <h1 className="text-4xl font-serif font-bold text-cafe-900 mb-3">
-          CafeNavi
+          {t("common.appName")}
         </h1>
         <p className="text-lg text-stone-600 leading-relaxed">
-          あなたにぴったりのコーヒーを見つけよう
+          {t("common.tagline")}
         </p>
       </div>
 
@@ -29,7 +31,7 @@ export function HomePage() {
           }
           role="button"
           tabIndex={0}
-          aria-label="かんたん診断を始める"
+          aria-label={t("home.beginnerAria")}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
@@ -43,13 +45,13 @@ export function HomePage() {
             </div>
             <div className="flex-1">
               <h2 className="text-xl font-bold text-cafe-800 mb-1">
-                かんたん診断
+                {t("home.beginnerMode")}
               </h2>
               <p className="text-sm text-stone-600 mb-3">
-                コーヒー初心者におすすめ。10問の質問であなたの好みを分析します。
+                {t("home.beginnerDesc")}
               </p>
               <Button size="sm" className="w-full">
-                10問で診断する
+                {t("home.beginnerButton")}
               </Button>
             </div>
           </div>
@@ -62,7 +64,7 @@ export function HomePage() {
           }
           role="button"
           tabIndex={0}
-          aria-label="くわしく診断を始める"
+          aria-label={t("home.advancedAria")}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
@@ -76,13 +78,13 @@ export function HomePage() {
             </div>
             <div className="flex-1">
               <h2 className="text-xl font-bold text-cafe-800 mb-1">
-                くわしく診断
+                {t("home.advancedMode")}
               </h2>
               <p className="text-sm text-stone-600 mb-3">
-                こだわり派に。20問の詳細な質問でより精密な診断結果をお届けします。
+                {t("home.advancedDesc")}
               </p>
               <Button size="sm" variant="secondary" className="w-full">
-                20問で診断する
+                {t("home.advancedButton")}
               </Button>
             </div>
           </div>
@@ -96,7 +98,7 @@ export function HomePage() {
           className="inline-flex items-center gap-2 text-cafe-600 hover:text-cafe-800 font-medium transition-colors"
         >
           <span aria-hidden="true">📖</span>
-          コーヒーガイドを見る
+          {t("home.guideLink")}
         </Link>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import type { FlavorScores } from "../../types/coffee";
+import { useTranslation } from "../../lib/i18n";
 
 type FlavorRadarChartProps = {
   userProfile: FlavorScores;
@@ -6,15 +7,15 @@ type FlavorRadarChartProps = {
   size?: number;
 };
 
-const axes: { key: keyof FlavorScores; label: string }[] = [
-  { key: "bitterness", label: "苦味" },
-  { key: "acidity", label: "酸味" },
-  { key: "sweetness", label: "甘み" },
-  { key: "body", label: "コク" },
-  { key: "fruitiness", label: "フルーティ" },
-  { key: "nuttiness", label: "ナッツ感" },
-  { key: "chocolaty", label: "チョコ感" },
-  { key: "roastiness", label: "焙煎感" },
+const axisKeys: { key: keyof FlavorScores; labelKey: string }[] = [
+  { key: "bitterness", labelKey: "flavor.bitterness" },
+  { key: "acidity", labelKey: "flavor.acidity" },
+  { key: "sweetness", labelKey: "flavor.sweetness" },
+  { key: "body", labelKey: "flavor.body" },
+  { key: "fruitiness", labelKey: "flavor.fruitiness" },
+  { key: "nuttiness", labelKey: "flavor.nuttiness" },
+  { key: "chocolaty", labelKey: "flavor.chocolaty" },
+  { key: "roastiness", labelKey: "flavor.roastiness" },
 ];
 
 const MAX_VALUE = 10;
@@ -32,6 +33,7 @@ function polarToCartesian(
 
 function getPolygonPoints(
   scores: FlavorScores,
+  axes: typeof axisKeys,
   cx: number,
   cy: number,
   maxRadius: number,
@@ -51,6 +53,7 @@ export function FlavorRadarChart({
   coffeeProfile,
   size = 280,
 }: FlavorRadarChartProps) {
+  const { t } = useTranslation();
   const cx = size / 2;
   const cy = size / 2;
   const maxRadius = size / 2 - 40;
@@ -61,20 +64,20 @@ export function FlavorRadarChart({
       viewBox={`0 0 ${size} ${size}`}
       className="w-full max-w-[320px] mx-auto"
       role="img"
-      aria-label="味覚プロファイルのレーダーチャート"
+      aria-label={t("result.radarChartAria")}
     >
       {/* Grid circles */}
       {levels.map((level) => (
         <polygon
           key={level}
-          points={axes
+          points={axisKeys
             .map((_, i) => {
               const [x, y] = polarToCartesian(
                 cx,
                 cy,
                 maxRadius * level,
                 i,
-                axes.length,
+                axisKeys.length,
               );
               return `${x},${y}`;
             })
@@ -86,8 +89,8 @@ export function FlavorRadarChart({
       ))}
 
       {/* Axis lines */}
-      {axes.map((_, i) => {
-        const [x, y] = polarToCartesian(cx, cy, maxRadius, i, axes.length);
+      {axisKeys.map((_, i) => {
+        const [x, y] = polarToCartesian(cx, cy, maxRadius, i, axisKeys.length);
         return (
           <line
             key={i}
@@ -104,7 +107,7 @@ export function FlavorRadarChart({
       {/* Coffee profile polygon (if provided) */}
       {coffeeProfile && (
         <polygon
-          points={getPolygonPoints(coffeeProfile, cx, cy, maxRadius)}
+          points={getPolygonPoints(coffeeProfile, axisKeys, cx, cy, maxRadius)}
           fill="rgba(180, 120, 60, 0.15)"
           stroke="#b4783c"
           strokeWidth={1.5}
@@ -114,21 +117,21 @@ export function FlavorRadarChart({
 
       {/* User profile polygon */}
       <polygon
-        points={getPolygonPoints(userProfile, cx, cy, maxRadius)}
+        points={getPolygonPoints(userProfile, axisKeys, cx, cy, maxRadius)}
         fill="rgba(212, 137, 42, 0.25)"
         stroke="#b8691e"
         strokeWidth={2}
       />
 
       {/* Data points */}
-      {axes.map((axis, i) => {
+      {axisKeys.map((axis, i) => {
         const value = userProfile[axis.key] / MAX_VALUE;
         const [x, y] = polarToCartesian(
           cx,
           cy,
           value * maxRadius,
           i,
-          axes.length,
+          axisKeys.length,
         );
         return (
           <circle key={axis.key} cx={x} cy={y} r={3} fill="#96501b" />
@@ -136,13 +139,13 @@ export function FlavorRadarChart({
       })}
 
       {/* Labels */}
-      {axes.map((axis, i) => {
+      {axisKeys.map((axis, i) => {
         const [x, y] = polarToCartesian(
           cx,
           cy,
           maxRadius + 22,
           i,
-          axes.length,
+          axisKeys.length,
         );
         return (
           <text
@@ -153,7 +156,7 @@ export function FlavorRadarChart({
             dominantBaseline="central"
             className="text-[10px] fill-stone-600 font-medium"
           >
-            {axis.label}
+            {t(axis.labelKey)}
           </text>
         );
       })}

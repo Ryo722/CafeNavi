@@ -4,6 +4,7 @@ import type {
   BrewingMethod,
 } from "../../types/coffee";
 import { Card } from "../ui/Card";
+import { useTranslation } from "../../lib/i18n";
 
 type BrewingRecommendationProps = {
   roast: RoastLevel;
@@ -11,27 +12,11 @@ type BrewingRecommendationProps = {
   brewingMethods: BrewingMethod[];
 };
 
-const roastLabels: Record<RoastLevel, string> = {
-  light: "浅煎り",
-  "medium-light": "中浅煎り",
-  medium: "中煎り",
-  "medium-dark": "中深煎り",
-  dark: "深煎り",
-};
-
-const grindLabels: Record<GrindSize, string> = {
-  "extra-fine": "極細挽き",
-  fine: "細挽き",
-  "medium-fine": "中細挽き",
-  medium: "中挽き",
-  coarse: "粗挽き",
-};
-
-const brewingLabels: Record<BrewingMethod, { name: string; icon: string }> = {
-  handDrip: { name: "ハンドドリップ", icon: "☕" },
-  espresso: { name: "エスプレッソ", icon: "🫖" },
-  frenchPress: { name: "フレンチプレス", icon: "🍵" },
-  coldBrew: { name: "水出しコーヒー", icon: "🧊" },
+const brewingIcons: Record<BrewingMethod, string> = {
+  handDrip: "☕",
+  espresso: "🫖",
+  frenchPress: "🍵",
+  coldBrew: "🧊",
 };
 
 const roastLevelPercent: Record<RoastLevel, number> = {
@@ -47,17 +32,19 @@ export function BrewingRecommendation({
   grind,
   brewingMethods,
 }: BrewingRecommendationProps) {
+  const { t } = useTranslation();
+
   return (
     <Card>
-      <h3 className="text-lg font-bold text-cafe-800 mb-4">おすすめ設定</h3>
+      <h3 className="text-lg font-bold text-cafe-800 mb-4">{t("brewing.title")}</h3>
 
       <div className="space-y-5">
         {/* Roast level */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-stone-600">焙煎度</span>
+            <span className="text-sm font-medium text-stone-600">{t("brewing.roastLevel")}</span>
             <span className="text-sm font-bold text-cafe-700">
-              {roastLabels[roast]}
+              {t(`roastLevel.${roast}`)}
             </span>
           </div>
           <div className="w-full h-3 bg-gradient-to-r from-amber-200 via-amber-500 to-amber-900 rounded-full overflow-hidden relative">
@@ -67,23 +54,23 @@ export function BrewingRecommendation({
             />
           </div>
           <div className="flex justify-between mt-1">
-            <span className="text-xs text-stone-400">浅煎り</span>
-            <span className="text-xs text-stone-400">深煎り</span>
+            <span className="text-xs text-stone-400">{t("brewing.lightRoast")}</span>
+            <span className="text-xs text-stone-400">{t("brewing.darkRoast")}</span>
           </div>
         </div>
 
         {/* Grind size */}
         <div className="flex items-center justify-between py-2 border-t border-cafe-50">
-          <span className="text-sm font-medium text-stone-600">挽き目</span>
+          <span className="text-sm font-medium text-stone-600">{t("brewing.grindSize")}</span>
           <span className="text-sm font-bold text-cafe-700">
-            {grindLabels[grind]}
+            {t(`grindSize.${grind}`)}
           </span>
         </div>
 
         {/* Brewing methods */}
         <div className="border-t border-cafe-50 pt-3">
           <span className="text-sm font-medium text-stone-600 block mb-3">
-            抽出方法
+            {t("brewing.brewingMethod")}
           </span>
           <div className="flex gap-3">
             {brewingMethods.map((method) => (
@@ -92,10 +79,10 @@ export function BrewingRecommendation({
                 className="flex-1 bg-cafe-50 rounded-xl p-3 text-center border border-cafe-100"
               >
                 <span className="text-2xl block mb-1" aria-hidden="true">
-                  {brewingLabels[method].icon}
+                  {brewingIcons[method]}
                 </span>
                 <span className="text-xs font-medium text-cafe-700">
-                  {brewingLabels[method].name}
+                  {t(`brewingMethod.${method}`)}
                 </span>
               </div>
             ))}

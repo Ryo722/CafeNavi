@@ -12,19 +12,7 @@ import { Card } from "../components/ui/Card";
 import { TasteSlider } from "../components/taste/TasteSlider";
 import { DessertSelector } from "../components/taste/DessertSelector";
 import { SceneSelector } from "../components/taste/SceneSelector";
-
-const sliderLabels: Record<string, { left: string; right: string }> = {
-  bitternessPreference: { left: "苦味が苦手", right: "苦味が好き" },
-  acidityPreference: { left: "酸味が苦手", right: "酸味が好き" },
-  sweetnessPreference: { left: "甘さ控えめ", right: "甘さ好き" },
-  bodyPreference: { left: "軽い口当たり", right: "重厚な口当たり" },
-  fruityPreference: { left: "フルーティさ控えめ", right: "フルーティ好き" },
-  milkPreference: { left: "ブラック派", right: "ミルクたっぷり派" },
-  roastedPreference: { left: "焙煎感控えめ", right: "焙煎感が好き" },
-  floralPreference: { left: "フローラル控えめ", right: "フローラル好き" },
-  nuttyPreference: { left: "ナッツ感控えめ", right: "ナッツ感好き" },
-  chocolatePreference: { left: "チョコ感控えめ", right: "チョコ感好き" },
-};
+import { useTranslation } from "../lib/i18n";
 
 const defaultInput: TasteProfileInput = {
   bitternessPreference: 3,
@@ -44,6 +32,7 @@ const defaultInput: TasteProfileInput = {
 export function QuestionnairePage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t, locale } = useTranslation();
   const mode: UserMode =
     (location.state as { mode?: UserMode })?.mode ?? "beginner";
 
@@ -78,15 +67,12 @@ export function QuestionnairePage() {
     question: Question,
     values: string[],
   ) => {
-    // For dessert/scene fields that span multiple questions,
-    // we need to merge selections properly
     const currentQuestion = question;
     const questionOptions =
       currentQuestion.options?.map((o) => o.value) ?? [];
 
     setInput((prev) => {
       const existing = prev[field] as string[];
-      // Remove options belonging to this question, then add newly selected
       const withoutCurrent = existing.filter(
         (v) => !questionOptions.includes(v),
       );
@@ -96,8 +82,7 @@ export function QuestionnairePage() {
 
   const goNext = () => {
     if (isLast) {
-      // Run diagnosis
-      const result = getFullRecommendation(input);
+      const result = getFullRecommendation(input, undefined, locale);
       const userProfile = calculateUserFlavorProfile(input);
       navigate("/result", { state: { result, userProfile, input, mode } });
     } else {
@@ -111,11 +96,17 @@ export function QuestionnairePage() {
     }
   };
 
-  const getQuestionText = (q: Question) =>
-    isBeginner ? q.textBeginner : q.text;
+  const getQuestionText = (q: Question) => {
+    const beginnerKey = `question.${q.id}.beginner`;
+    const normalKey = `question.${q.id}`;
+    return isBeginner ? t(beginnerKey) : t(normalKey);
+  };
 
-  const getOptionLabel = (option: { label: string; labelBeginner: string }) =>
-    isBeginner ? option.labelBeginner : option.label;
+  const getOptionLabel = (option: { value: string; label: string; labelBeginner: string }) => {
+    const beginnerKey = `option.${option.value}.beginner`;
+    const normalKey = `option.${option.value}`;
+    return isBeginner ? t(beginnerKey) : t(normalKey);
+  };
 
   const getCurrentSliderValue = (): number => {
     const val = input[question.field];
@@ -125,9 +116,16 @@ export function QuestionnairePage() {
   const getCurrentMultiSelectValue = (): string[] => {
     const val = input[question.field];
     if (!Array.isArray(val)) return [];
-    // Filter to only options in the current question
     const questionOptions = question.options?.map((o) => o.value) ?? [];
     return (val as string[]).filter((v) => questionOptions.includes(v));
+  };
+
+  const getSliderLeftLabel = (): string => {
+    return t(`slider.${question.field}.left`);
+  };
+
+  const getSliderRightLabel = (): string => {
+    return t(`slider.${question.field}.right`);
   };
 
   return (
@@ -136,7 +134,9 @@ export function QuestionnairePage() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm text-stone-500">
-            {mode === "beginner" ? "かんたん診断" : "くわしく診断"}
+            {mode === "beginner"
+              ? t("questionnaire.beginnerLabel")
+              : t("questionnaire.advancedLabel")}
           </span>
           <span className="text-sm font-medium text-cafe-700">
             {currentIndex + 1} / {totalQuestions}
@@ -168,8 +168,8 @@ export function QuestionnairePage() {
             questionId={question.id}
             value={getCurrentSliderValue()}
             onChange={(v) => handleSliderChange(question.field, v)}
-            leftLabel={sliderLabels[question.field]?.left ?? ""}
-            rightLabel={sliderLabels[question.field]?.right ?? ""}
+            leftLabel={getSliderLeftLabel()}
+            rightLabel={getSliderRightLabel()}
           />
         )}
 
@@ -208,10 +208,10 @@ export function QuestionnairePage() {
           disabled={currentIndex === 0}
           className="flex-1"
         >
-          戻る
+          {t("common.back")}
         </Button>
         <Button onClick={goNext} className="flex-1">
-          {isLast ? "診断する" : "次へ"}
+          {isLast ? t("common.submit") : t("common.next")}
         </Button>
       </div>
     </div>

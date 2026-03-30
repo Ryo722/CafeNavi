@@ -7,49 +7,55 @@ import type {
   RoastLevel,
 } from "../types/coffee";
 import type { TasteProfileInput } from "../types/questionnaire";
+import type { Locale } from "./i18n/types";
 import { coffeeProfiles } from "../data/coffeeProfiles";
 import { pairingByRoast } from "../data/pairingData";
 import { calculateUserFlavorProfile } from "./scoring";
 import { getTopRecommendations } from "./similarity";
+import { ja } from "./i18n/ja";
+import { en } from "./i18n/en";
+
+const translations: Record<Locale, Record<string, string>> = {
+  ja: ja as Record<string, string>,
+  en: en as Record<string, string>,
+};
+
+function tl(locale: Locale, key: string, params?: Record<string, string>): string {
+  const template = translations[locale][key] ?? translations.ja[key] ?? key;
+  if (!params) return template;
+  return template.replace(/\{\{(\w+)\}\}/g, (_, k) => params[k] ?? _);
+}
 
 /**
- * 推薦理由を日本語の自然文で生成する。
+ * 推薦理由を生成する。locale に応じて日本語/英語で返す。
  */
 export function generateRecommendationReasons(
   userInput: TasteProfileInput,
   userProfile: FlavorScores,
   coffee: CoffeeProfile,
+  locale: Locale = "ja",
 ): string[] {
   const reasons: string[] = [];
   const fs = coffee.flavorScores;
+  const coffeeName = tl(locale, `coffee.${coffee.id}.name`);
 
   // 苦味の好みとの一致
   if (userProfile.bitterness >= 6 && fs.bitterness >= 6) {
-    reasons.push(
-      "しっかりとした苦味がお好みなので、苦味のある" +
-        coffee.nameJa +
-        "がおすすめです",
-    );
+    reasons.push(tl(locale, "reason.bitterMatch", { name: coffeeName }));
   } else if (userProfile.bitterness <= 4 && fs.bitterness <= 4) {
-    reasons.push(
-      "苦味控えめがお好みに合う、飲みやすい味わいです",
-    );
+    reasons.push(tl(locale, "reason.bitterLow"));
   }
 
   // 酸味の好みとの一致
   if (userProfile.acidity >= 6 && fs.acidity >= 6) {
-    reasons.push(
-      "フルーツのような明るい酸味が楽しめます",
-    );
+    reasons.push(tl(locale, "reason.acidityHigh"));
   } else if (userProfile.acidity <= 3 && fs.acidity <= 3) {
-    reasons.push("酸味控えめで飲みやすい味わいです");
+    reasons.push(tl(locale, "reason.acidityLow"));
   }
 
   // フルーティの好み
   if (userProfile.fruitiness >= 6 && fs.fruitiness >= 6) {
-    reasons.push(
-      "フルーティな風味がお好みに合います",
-    );
+    reasons.push(tl(locale, "reason.fruityMatch"));
   }
 
   // チョコ・ナッツ系お菓子の好み
@@ -57,22 +63,14 @@ export function generateRecommendationReasons(
     userInput.dessertPreference.includes("chocolate") &&
     fs.chocolaty >= 5
   ) {
-    reasons.push(
-      "チョコレート系のお菓子がお好きなので、チョコレート感のある" +
-        coffee.nameJa +
-        "がおすすめです",
-    );
+    reasons.push(tl(locale, "reason.chocoMatch", { name: coffeeName }));
   }
 
   if (
     userInput.dessertPreference.includes("nuts") &&
     fs.nuttiness >= 5
   ) {
-    reasons.push(
-      "ナッツ系のお菓子がお好きなので、ナッツの風味がある" +
-        coffee.nameJa +
-        "が合います",
-    );
+    reasons.push(tl(locale, "reason.nutMatch", { name: coffeeName }));
   }
 
   // ベリー・柑橘系お菓子の好み
@@ -81,9 +79,7 @@ export function generateRecommendationReasons(
       userInput.dessertPreference.includes("citrusFruits")) &&
     fs.fruitiness >= 6
   ) {
-    reasons.push(
-      "フルーツ系のお菓子がお好きなので、フルーティな味わいが楽しめます",
-    );
+    reasons.push(tl(locale, "reason.fruitDessertMatch"));
   }
 
   // 和菓子好き
@@ -91,9 +87,7 @@ export function generateRecommendationReasons(
     userInput.dessertPreference.includes("wagashi") &&
     fs.cleanness >= 7
   ) {
-    reasons.push(
-      "和菓子がお好きなので、クリーンな味わいとの相性が良いです",
-    );
+    reasons.push(tl(locale, "reason.wagashiMatch"));
   }
 
   // シーンに基づく理由
@@ -101,89 +95,68 @@ export function generateRecommendationReasons(
     userInput.drinkScenes.includes("morningRefresh") &&
     fs.cleanness >= 7
   ) {
-    reasons.push(
-      "朝すっきり飲みたいシーンには、クリーンな味わいが最適です",
-    );
+    reasons.push(tl(locale, "reason.morningScene"));
   }
 
   if (
     userInput.drinkScenes.includes("workFocus") &&
     fs.body >= 6
   ) {
-    reasons.push(
-      "仕事中の集中タイムには、しっかりしたボディが頼りになります",
-    );
+    reasons.push(tl(locale, "reason.workScene"));
   }
 
   if (
     userInput.drinkScenes.includes("relax") &&
     fs.sweetness >= 6
   ) {
-    reasons.push(
-      "リラックスタイムには、甘みのある穏やかな味わいがぴったりです",
-    );
+    reasons.push(tl(locale, "reason.relaxScene"));
   }
 
   // ミルク派
   if (userInput.milkPreference >= 4 && fs.body >= 6) {
-    reasons.push(
-      "ミルクを入れても負けない、しっかりとしたボディがあります",
-    );
+    reasons.push(tl(locale, "reason.milkMatch"));
   }
 
   // フローラル
   if (userProfile.floral >= 6 && fs.floral >= 7) {
-    reasons.push(
-      "華やかなフローラルアロマが楽しめます",
-    );
+    reasons.push(tl(locale, "reason.floralMatch"));
   }
 
   // 理由が少ない場合のフォールバック
   if (reasons.length === 0) {
-    reasons.push(
-      "お好みの味覚プロファイルとの相性が良い一杯です",
-    );
+    reasons.push(tl(locale, "reason.fallback"));
   }
 
   return reasons;
 }
 
 /**
- * ユーザーが避けた方がよい傾向を日本語で生成する。
+ * ユーザーが避けた方がよい傾向を生成する。
  */
 export function generateAvoidNotes(
   userProfile: FlavorScores,
+  locale: Locale = "ja",
 ): string[] {
   const notes: string[] = [];
 
   if (userProfile.bitterness <= 2) {
-    notes.push(
-      "深煎りの強い苦味は苦手かもしれません。浅煎り〜中煎りがおすすめです",
-    );
+    notes.push(tl(locale, "avoid.deepRoast"));
   }
 
   if (userProfile.acidity <= 2) {
-    notes.push(
-      "酸味の強い浅煎りアフリカ産は合わない可能性があります",
-    );
+    notes.push(tl(locale, "avoid.lightRoastAfrica"));
   }
 
   if (userProfile.body <= 2) {
-    notes.push(
-      "重厚なボディのコーヒー（マンデリンなど）は重く感じるかもしれません",
-    );
+    notes.push(tl(locale, "avoid.heavyBody"));
   }
 
   if (userProfile.fruitiness <= 2 && userProfile.floral <= 2) {
-    notes.push(
-      "華やかでフルーティな浅煎りコーヒーは好みに合わない可能性があります",
-    );
+    notes.push(tl(locale, "avoid.fruityFloral"));
   }
 
   if (userProfile.roastiness <= 2) {
-    notes.push(
-      "焙煎感の強い深煎りコーヒーは避けた方が良いでしょう",
-    );
+    notes.push(tl(locale, "avoid.strongRoast"));
   }
 
   return notes;
@@ -255,6 +228,7 @@ function recommendGrindSize(method: BrewingMethod): GrindSize {
 export function getFullRecommendation(
   input: TasteProfileInput,
   profiles: CoffeeProfile[] = coffeeProfiles,
+  locale: Locale = "ja",
 ): RecommendationResult {
   // ユーザーの味覚プロファイルを算出
   const userProfile = calculateUserFlavorProfile(input);
@@ -266,8 +240,8 @@ export function getFullRecommendation(
   const topMatchesWithReasons = topMatches.map((match) => {
     const coffee = profiles.find((p) => p.id === match.coffeeId);
     const reasons = coffee
-      ? generateRecommendationReasons(input, userProfile, coffee)
-      : ["お好みに合うコーヒーです"];
+      ? generateRecommendationReasons(input, userProfile, coffee, locale)
+      : [tl(locale, "reason.fallback")];
     return { ...match, reasons };
   });
 
@@ -284,7 +258,7 @@ export function getFullRecommendation(
   const pairingSuggestions = pairingByRoast[recommendedRoast] ?? [];
 
   // 避けた方がよいノート
-  const avoidNotes = generateAvoidNotes(userProfile);
+  const avoidNotes = generateAvoidNotes(userProfile, locale);
 
   return {
     topMatches: topMatchesWithReasons,
