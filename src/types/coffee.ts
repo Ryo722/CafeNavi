@@ -60,6 +60,7 @@ export type RecommendationResult = {
     coffeeId: string;
     score: number;
     reasons: string[];
+    isSerendipity?: boolean;
   }[];
   recommendedRoast: RoastLevel;
   recommendedGrind: GrindSize;

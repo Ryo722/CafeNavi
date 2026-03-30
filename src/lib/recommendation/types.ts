@@ -24,6 +24,7 @@ export type AnalyzedPreference = {
   drinkStyle: DrinkStyle;           // ブラック/ミルク/アイス等
   combinedProfile: FlavorScores;    // 統合プロファイル
   dislikeFlags: Partial<Record<keyof FlavorScores, boolean>>;  // 明示的な嫌い
+  dislikeMap: DislikeMap;           // 2段階のDislike情報
 };
 
 /** Step 2: 焙煎度推定の結果 */
@@ -68,7 +69,18 @@ export type RankedResult = {
   score: number;
   reasons: string[];
   brewing: BrewingSelection;
+  isSerendipity?: boolean;
+  hasSeasonalBonus?: boolean;
 };
 
 /** 動的重み調整 */
 export type WeightAdjustments = Partial<Record<keyof FlavorScores, number>>;
+
+/** Dislike の2段階レベル */
+export type DislikeLevel = "hard" | "soft" | "none";
+
+/** 各フレーバー軸のDislikeマップ */
+export type DislikeMap = Partial<Record<keyof FlavorScores, DislikeLevel>>;
+
+/** A/Bテスト用のストラテジー */
+export type RecommendationStrategy = "v1" | "v2";

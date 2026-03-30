@@ -9,6 +9,19 @@ import type {
 import { synergyRules } from "./rules/synergyRules";
 import { resolveWeights } from "./rules/weightProfiles";
 import { selectBrewingMethods } from "./brewingSelector";
+import type { Season } from "../../data/seasonalRecommendations";
+
+/** 現在の月から季節を判定 */
+export function getCurrentSeason(): Season {
+  const month = new Date().getMonth() + 1;
+  if (month >= 3 && month <= 5) return "spring";
+  if (month >= 6 && month <= 8) return "summer";
+  if (month >= 9 && month <= 11) return "autumn";
+  return "winter";
+}
+
+/** 季節ボーナスの倍率 (5-10%) */
+const SEASONAL_BONUS = 1.07;
 
 const FLAVOR_KEYS: (keyof FlavorScores)[] = [
   "bitterness", "acidity", "sweetness", "body", "fruitiness",
@@ -93,6 +106,18 @@ export function rankCandidates(
     // confidence加味
     score *= (0.7 + coffee.confidence * 0.3);
 
+    // softDislikeペナルティ: スライダー値2の軸が高い候補にペナルティ（-20%）
+    if (pref.dislikeMap) {
+      for (const [key, level] of Object.entries(pref.dislikeMap)) {
+        if (level === "soft") {
+          const k = key as keyof FlavorScores;
+          if (coffee.flavorScores[k] >= 6) {
+            score *= 0.80;
+          }
+        }
+      }
+    }
+
     // 0-100に正規化
     rawScores[coffee.id] = Math.round(score * 100 * 10) / 10;
   }
@@ -105,7 +130,21 @@ export function rankCandidates(
     }
   }
 
-  // 4. ソートして上位Nを返す
+  // 4. 季節ボーナス適用
+  const currentSeason = getCurrentSeason();
+  const seasonalBonusIds = new Set<string>();
+  for (const { coffee } of allCandidates) {
+    if (
+      coffee.seasonalAffinity &&
+      coffee.seasonalAffinity.includes(currentSeason) &&
+      adjustedScores[coffee.id] !== undefined
+    ) {
+      adjustedScores[coffee.id] = Math.round(adjustedScores[coffee.id] * SEASONAL_BONUS * 10) / 10;
+      seasonalBonusIds.add(coffee.id);
+    }
+  }
+
+  // 5. ソートして上位Nを返す
   const sortedIds = Object.keys(adjustedScores).sort(
     (a, b) => adjustedScores[b] - adjustedScores[a],
   );
@@ -121,6 +160,7 @@ export function rankCandidates(
       score: Math.round(adjustedScores[id] * 10) / 10,
       reasons: [], // reasonGeneratorで後から付与
       brewing: selectBrewingMethods(pref, roast, coffee),
+      hasSeasonalBonus: seasonalBonusIds.has(id),
     });
   }
 

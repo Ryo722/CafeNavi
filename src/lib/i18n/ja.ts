@@ -610,6 +610,22 @@ export const ja: Translations = {
   "seasonal.pairings": "季節のペアリング",
   "seasonal.moreLink": "この季節のコーヒーをもっと見る",
 
+  // serendipity (adventure slot)
+  "result.serendipityLabel": "\uD83C\uDFB2 いつもと違う一杯",
+
+  // cold start
+  "coldStart.title": "初めての方におすすめ",
+  "coldStart.description": "コーヒー初心者の方にも飲みやすい、バランスの良いコーヒーをご紹介します。",
+  "coldStart.fallbackReason": "初めての方にもおすすめのバランスの良いコーヒーです",
+
+  // seasonal bonus reason
+  "reason.seasonalBonus": "この季節にぴったりの味わいです",
+
+  // A/B test strategy
+  "strategy.label": "推薦エンジン",
+  "strategy.v1": "v1（旧）",
+  "strategy.v2": "v2（新）",
+
   // date format
   "date.format": "{{y}}年{{m}}月{{d}}日 {{h}}:{{min}}",
 };
