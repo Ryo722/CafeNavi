@@ -120,9 +120,9 @@ export function ResultPage() {
             <p className="text-4xl mb-2" aria-hidden="true">
               {mainType.emoji}
             </p>
-            <h3 className="text-lg font-bold text-cafe-800 mb-1">
+            <h2 className="text-lg font-bold text-cafe-800 mb-1">
               {t(`tasteType.${mainType.id}`)}
-            </h3>
+            </h2>
             <p className="text-sm text-stone-500">
               {t(`tasteType.${mainType.id}.desc`)}
             </p>
@@ -144,9 +144,9 @@ export function ResultPage() {
       {/* Flavor radar chart */}
       <section className="mb-8" aria-label={t("result.sectionFlavorProfile")}>
         <Card>
-          <h3 className="text-lg font-bold text-cafe-800 mb-2 text-center">
+          <h2 className="text-lg font-bold text-cafe-800 mb-2 text-center">
             {t("result.sectionFlavorProfile")}
-          </h3>
+          </h2>
           <div className="flex items-center justify-center gap-4 mb-2 text-xs text-stone-500">
             <span className="flex items-center gap-1">
               <span className="inline-block w-3 h-3 rounded-sm bg-cafe-500/25 border border-cafe-600" />
@@ -184,9 +184,9 @@ export function ResultPage() {
       {result.avoidNotes.length > 0 && (
         <section className="mb-8" aria-label={t("result.sectionAvoid")}>
           <Card>
-            <h3 className="text-lg font-bold text-cafe-800 mb-3">
+            <h2 className="text-lg font-bold text-cafe-800 mb-3">
               {t("result.sectionAvoid")}
-            </h3>
+            </h2>
             <div className="space-y-2">
               {result.avoidNotes.map((note, i) => (
                 <p

@@ -23,7 +23,7 @@ export function DessertSelector({
   };
 
   return (
-    <div className="grid grid-cols-2 gap-3">
+    <div className="grid grid-cols-2 gap-3" role="group" aria-label="Select options">
       {options.map((option) => {
         const isSelected = selected.includes(option.value);
         return (

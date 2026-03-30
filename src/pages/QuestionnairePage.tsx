@@ -172,6 +172,11 @@ export function QuestionnairePage() {
               width: `${((currentIndex + 1) / totalQuestions) * 100}%`,
               transition: "width 0.3s ease",
             }}
+            role="progressbar"
+            aria-valuenow={currentIndex + 1}
+            aria-valuemin={1}
+            aria-valuemax={totalQuestions}
+            aria-label={`${currentIndex + 1} / ${totalQuestions}`}
           />
         </div>
       </div>

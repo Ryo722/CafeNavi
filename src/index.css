@@ -170,6 +170,19 @@ input[type="range"]::-moz-range-thumb {
 }
 
 /* ============================================
+   Accessibility: focus-visible
+   ============================================ */
+
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-cafe-400);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ============================================
    Accessibility: reduced motion
    ============================================ */
 

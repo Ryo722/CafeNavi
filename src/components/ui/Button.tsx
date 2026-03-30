@@ -35,7 +35,7 @@ export function Button({
     <button
       className={`
         rounded-xl font-medium transition-all duration-200
-        focus:outline-none focus:ring-2 focus:ring-cafe-400 focus:ring-offset-2
+        focus:outline-none focus-visible:ring-2 focus-visible:ring-cafe-400 focus-visible:ring-offset-2
         disabled:opacity-50 disabled:cursor-not-allowed
         cursor-pointer
         hover:scale-[1.02] active:scale-[0.98]

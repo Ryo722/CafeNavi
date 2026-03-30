@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 type BarChartItem = {
   label: string;
   value: number;
@@ -9,7 +11,7 @@ type BarChartProps = {
   colorClass?: string;
 };
 
-export function BarChart({ items, colorClass = "bg-cafe-600" }: BarChartProps) {
+export const BarChart = memo(function BarChart({ items, colorClass = "bg-cafe-600" }: BarChartProps) {
   if (items.length === 0) return null;
 
   return (
@@ -45,4 +47,4 @@ export function BarChart({ items, colorClass = "bg-cafe-600" }: BarChartProps) {
       })}
     </div>
   );
-}
+});
