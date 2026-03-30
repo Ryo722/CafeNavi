@@ -8,6 +8,7 @@ import { Button } from "../components/ui/Button";
 import { CoffeeCard } from "../components/result/CoffeeCard";
 import { BrewingRecommendation } from "../components/result/BrewingRecommendation";
 import { PairingList } from "../components/result/PairingList";
+import { ShareButtons } from "../components/result/ShareButtons";
 import { FlavorRadarChart } from "../components/charts/FlavorRadarChart";
 import { Card } from "../components/ui/Card";
 import { saveDiagnosis } from "../lib/storage";
@@ -162,6 +163,18 @@ export function ResultPage() {
                 </p>
               ))}
             </div>
+          </Card>
+        </section>
+      )}
+
+      {/* Share */}
+      {topCoffee && (
+        <section className="mb-8" aria-label="結果をシェア">
+          <Card>
+            <ShareButtons
+              coffeeName={topCoffee.nameJa}
+              score={result.topMatches[0].score}
+            />
           </Card>
         </section>
       )}

@@ -6,6 +6,7 @@ const navLinks = [
   { to: "/questionnaire", label: "Questionnaire" },
   { to: "/guide", label: "Guide" },
   { to: "/history", label: "History" },
+  { to: "/bean-advisor", label: "Bean Advisor" },
 ];
 
 export function Header() {
