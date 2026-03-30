@@ -15,6 +15,7 @@ import { AnimatedList } from "../components/ui/AnimatedList";
 import { saveDiagnosis } from "../lib/storage";
 import type { DiagnosisRecord } from "../lib/storage";
 import { useTranslation } from "../lib/i18n";
+import { classifyTasteType, getSecondaryType } from "../lib/tasteType";
 
 type LocationState = {
   result: RecommendationResult;
@@ -60,6 +61,9 @@ export function ResultPage() {
   if (!state) return null;
 
   const { result, userProfile } = state;
+
+  const mainType = classifyTasteType(userProfile);
+  const secondaryType = getSecondaryType(userProfile);
 
   const topCoffee = result.topMatches[0]
     ? coffeeProfiles.find((p) => p.id === result.topMatches[0].coffeeId)
@@ -107,6 +111,34 @@ export function ResultPage() {
             );
           })}
         </AnimatedList>
+      </section>
+
+      {/* Taste type */}
+      <section className="mb-8" aria-label={t("tasteType.title")}>
+        <Card>
+          <div className="text-center">
+            <p className="text-4xl mb-2" aria-hidden="true">
+              {mainType.emoji}
+            </p>
+            <h3 className="text-lg font-bold text-cafe-800 mb-1">
+              {t(`tasteType.${mainType.id}`)}
+            </h3>
+            <p className="text-sm text-stone-500">
+              {t(`tasteType.${mainType.id}.desc`)}
+            </p>
+            {secondaryType && (
+              <div className="mt-3 pt-3 border-t border-stone-200">
+                <p className="text-xs text-stone-400 mb-1">
+                  {t("tasteType.secondary")}
+                </p>
+                <p className="text-sm text-cafe-700">
+                  <span aria-hidden="true">{secondaryType.emoji} </span>
+                  {t(`tasteType.${secondaryType.id}`)}
+                </p>
+              </div>
+            )}
+          </div>
+        </Card>
       </section>
 
       {/* Flavor radar chart */}

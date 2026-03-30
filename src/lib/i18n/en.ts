@@ -579,6 +579,28 @@ export const en: Translations = {
   "stats.brewingDistribution": "Brewing Method Distribution",
   "stats.flavorTrend": "Flavor Trend",
   "stats.viewHistory": "View History",
+  "stats.tasteType": "Your Taste Type",
+  "stats.tasteTypeDistribution": "Taste Type Distribution",
+
+  // taste type
+  "tasteType.title": "Your Taste Type",
+  "tasteType.secondary": "Secondary Type",
+  "tasteType.fruity": "Fruity Type",
+  "tasteType.bitter": "Bitter Type",
+  "tasteType.choco-nut": "Choco & Nut Type",
+  "tasteType.floral": "Floral Type",
+  "tasteType.heavy-body": "Heavy Body Type",
+  "tasteType.sweet": "Sweet Type",
+  "tasteType.balance": "Balanced Type",
+  "tasteType.clean": "Clean Type",
+  "tasteType.fruity.desc": "You enjoy refreshing, fruit-like flavors",
+  "tasteType.bitter.desc": "You love deep bitterness and rich body",
+  "tasteType.choco-nut.desc": "You love chocolate and nutty flavors",
+  "tasteType.floral.desc": "You enjoy delicate floral aromas",
+  "tasteType.heavy-body.desc": "You seek a full, heavy-bodied cup",
+  "tasteType.sweet.desc": "You prefer sweet, mellow coffees",
+  "tasteType.balance.desc": "You enjoy well-balanced, versatile coffees",
+  "tasteType.clean.desc": "You prefer clean, clear flavors with no off-notes",
 
   // seasonal
   "seasonal.title": "Seasonal Picks",

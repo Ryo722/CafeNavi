@@ -10,6 +10,7 @@ import { FlavorRadarChart } from "../components/charts/FlavorRadarChart";
 import { BarChart } from "../components/charts/BarChart";
 import { TrendChart } from "../components/charts/TrendChart";
 import { useTranslation } from "../lib/i18n";
+import { classifyTasteType, TASTE_TYPES } from "../lib/tasteType";
 
 export function StatsPage() {
   const navigate = useNavigate();
@@ -73,6 +74,31 @@ export function StatsPage() {
       ? t(`roastLevel.${stats.preferredRoastLevels[0].level}`)
       : "-";
 
+  // 味覚タイプの分布（過去診断）
+  const tasteTypeCount = new Map<string, number>();
+  for (const record of history) {
+    const tt = classifyTasteType(record.userFlavorProfile);
+    tasteTypeCount.set(tt.id, (tasteTypeCount.get(tt.id) ?? 0) + 1);
+  }
+  const tasteTypeDistribution = Array.from(tasteTypeCount.entries())
+    .map(([id, count]) => ({ id, count }))
+    .sort((a, b) => b.count - a.count);
+
+  // 最も多い味覚タイプ
+  const dominantType = tasteTypeDistribution.length > 0
+    ? TASTE_TYPES.find((tt) => tt.id === tasteTypeDistribution[0].id)
+    : undefined;
+
+  // タイプ分布のBarChartデータ
+  const tasteTypeBarItems = tasteTypeDistribution.map((item) => {
+    const tt = TASTE_TYPES.find((t) => t.id === item.id);
+    return {
+      label: tt ? `${tt.emoji} ${t(`tasteType.${tt.id}`)}` : item.id,
+      value: item.count,
+      maxValue: stats.totalDiagnoses,
+    };
+  });
+
   // BarChart用データ: よく推薦されるコーヒー
   const topCoffeeBarItems = stats.topRecommendedCoffees.map((item) => {
     const profile = coffeeProfiles.find((p) => p.id === item.coffeeId);
@@ -119,7 +145,7 @@ export function StatsPage() {
         </div>
 
         {/* サマリーカード */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
           <Card padding="sm" className="text-center">
             <p className="text-xs text-stone-400 mb-1">
               {t("stats.totalDiagnoses")}
@@ -127,6 +153,16 @@ export function StatsPage() {
             <p className="text-2xl font-bold text-cafe-800">
               {stats.totalDiagnoses}
             </p>
+          </Card>
+          <Card padding="sm" className="text-center">
+            <p className="text-xs text-stone-400 mb-1">
+              {t("stats.tasteType")}
+            </p>
+            {dominantType && (
+              <p className="text-sm font-bold text-cafe-800">
+                {dominantType.emoji} {t(`tasteType.${dominantType.id}`)}
+              </p>
+            )}
           </Card>
           <Card padding="sm" className="text-center">
             <p className="text-xs text-stone-400 mb-1">
@@ -151,6 +187,16 @@ export function StatsPage() {
           </h2>
           <FlavorRadarChart userProfile={stats.averageFlavorProfile} />
         </Card>
+
+        {/* 味覚タイプの分布 */}
+        {tasteTypeBarItems.length > 0 && (
+          <Card className="mb-6">
+            <h2 className="text-lg font-serif font-bold text-cafe-900 mb-3">
+              {t("stats.tasteTypeDistribution")}
+            </h2>
+            <BarChart items={tasteTypeBarItems} colorClass="bg-cafe-600" />
+          </Card>
+        )}
 
         {/* よく推薦されるコーヒー TOP5 */}
         {topCoffeeBarItems.length > 0 && (
