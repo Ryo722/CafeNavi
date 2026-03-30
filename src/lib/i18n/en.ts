@@ -304,6 +304,36 @@ export const en: Translations = {
     "Tanzania's signature bean, grown at high altitude on the slopes of Mt. Kilimanjaro. Bright citrus acidity with a clean finish. Elegant, tea-like quality makes it light and enjoyable.",
   "coffee.panama-geisha.description":
     "The world's most prestigious coffee variety. Overwhelming jasmine and rose-like floral aromas with tropical fruit sweetness. Best enjoyed as a light roast, hand-dripped to preserve its delicate flavors.",
+  "coffee.hawaii-kona.description":
+    "A rare coffee grown in volcanic soil on Hawaii's Kona coast. Mellow mouthfeel with nutty flavors and refined sweetness. Clean with minimal off-notes, making it approachable for everyone.",
+  "coffee.jamaica-blue-mountain.description":
+    "One of the world's three great coffees, grown in Jamaica's Blue Mountains. Praised as the pinnacle of balance, with acidity, sweetness, bitterness, and body in perfect harmony. Silky smooth with a clean finish.",
+  "coffee.nicaragua.description":
+    "Coffee from the volcanic regions of Central America's Nicaragua. Characterized by caramel and chocolate sweetness with a medium body. A reliable cup that also works well as espresso.",
+  "coffee.honduras.description":
+    "From Honduras, a major Central American coffee-producing region. Caramel sweetness and fruity acidity in balanced harmony, with a clean and approachable taste. Versatile across many brewing methods.",
+  "coffee.el-salvador.description":
+    "Coffee grown at high altitude in Central America's El Salvador. Features chocolate and honey-like sweetness with a creamy mouthfeel. Its gentle, soothing character is perfect for after-meal relaxation.",
+  "coffee.mexico.description":
+    "Coffee from the mountainous regions of southern Mexico. Mild nutty and chocolate flavors with a light body. Low in complexity, making it an accessible everyday coffee.",
+  "coffee.peru.description":
+    "Coffee from Peru's Andes mountains. Floral aromas with citrus brightness and milk chocolate sweetness in harmony. A delicate and refined cup to savor.",
+  "coffee.bolivia.description":
+    "A rare coffee produced in small quantities at high altitude in Bolivia. Complex interplay of fruity and floral notes creates a delicate, layered experience. Light roasting reveals its full character.",
+  "coffee.rwanda.description":
+    "Coffee from the highlands of Rwanda, 'the land of a thousand hills.' Vibrant berry-like juiciness and floral aromas create a bright, lively cup. Classic African coffee vibrancy at its best.",
+  "coffee.burundi.description":
+    "Coffee from the highlands of East Africa's Burundi. Berry fruitiness, citrus brightness, and tea-like elegance define this light, refreshing cup.",
+  "coffee.india-malabar.description":
+    "A coffee uniquely processed by monsoon winds on India's Malabar coast. Spicy, full-bodied, and low in acidity. Its distinctive character is often featured in espresso blends.",
+  "coffee.myanmar.description":
+    "An emerging origin from Myanmar's Shan Plateau in Southeast Asia. Nutty and chocolate flavors accented with honey-like sweetness. A gentle cup from a rapidly growing coffee region.",
+  "coffee.china-yunnan.description":
+    "A specialty coffee from the highlands of China's Yunnan province. Fruity and floral with a delicate tea-like quality reminiscent of Chinese teas. Quality has been improving rapidly in recent years.",
+  "coffee.papua-new-guinea.description":
+    "Coffee grown amid the rich natural environment of Papua New Guinea. Wild tropical fruit and spice flavors create a distinctively untamed character. Bold body with complex, adventurous taste.",
+  "coffee.east-timor.description":
+    "Organically grown coffee from the small Southeast Asian nation of East Timor. Chocolate depth with earthy undertones and herbal accents. Medium-dark roasting brings out its best qualities.",
 
   // coffee names (en)
   "coffee.ethiopia-yirgacheffe.name": "Ethiopia Yirgacheffe",
@@ -316,6 +346,21 @@ export const en: Translations = {
   "coffee.yemen-mocha.name": "Yemen Mocha",
   "coffee.tanzania-kilimanjaro.name": "Tanzania Kilimanjaro",
   "coffee.panama-geisha.name": "Panama Geisha",
+  "coffee.hawaii-kona.name": "Hawaii Kona",
+  "coffee.jamaica-blue-mountain.name": "Jamaica Blue Mountain",
+  "coffee.nicaragua.name": "Nicaragua",
+  "coffee.honduras.name": "Honduras",
+  "coffee.el-salvador.name": "El Salvador",
+  "coffee.mexico.name": "Mexico",
+  "coffee.peru.name": "Peru",
+  "coffee.bolivia.name": "Bolivia",
+  "coffee.rwanda.name": "Rwanda",
+  "coffee.burundi.name": "Burundi",
+  "coffee.india-malabar.name": "India Malabar",
+  "coffee.myanmar.name": "Myanmar",
+  "coffee.china-yunnan.name": "China Yunnan",
+  "coffee.papua-new-guinea.name": "Papua New Guinea",
+  "coffee.east-timor.name": "East Timor",
 
   // coffee notes
   "note.ジャスミン": "Jasmine",
@@ -362,6 +407,25 @@ export const en: Translations = {
   "note.マンゴー": "Mango",
   "note.ライチ": "Lychee",
   "note.アールグレイ": "Earl Grey",
+  "note.マカダミアナッツ": "Macadamia Nut",
+  "note.バター": "Butter",
+  "note.ほのかなシトラス": "Subtle Citrus",
+  "note.フローラル": "Floral",
+  "note.ナッツ": "Nuts",
+  "note.クリーミー": "Creamy",
+  "note.スイートシトラス": "Sweet Citrus",
+  "note.ほのかなベリー": "Subtle Berry",
+  "note.ベリー": "Berry",
+  "note.マスカット": "Muscat",
+  "note.ラズベリー": "Raspberry",
+  "note.ジューシー": "Juicy",
+  "note.タバコ": "Tobacco",
+  "note.モルト": "Malt",
+  "note.軽やかなシトラス": "Light Citrus",
+  "note.プラム": "Plum",
+  "note.ジャスミン茶": "Jasmine Tea",
+  "note.トロピカルフルーツ": "Tropical Fruit",
+  "note.ワイルドベリー": "Wild Berry",
 
   // pairing items
   "pairing.レモンタルト": "Lemon Tart",
@@ -407,6 +471,8 @@ export const en: Translations = {
   "pairing.おはぎ": "Ohagi",
   "pairing.ティラミス": "Tiramisu",
   "pairing.くるみ餅": "Walnut Mochi",
+  "pairing.マカダミアナッツクッキー": "Macadamia Nut Cookie",
+  "pairing.フィナンシェ": "Financier",
 
   // recommendation reasons
   "reason.bitterMatch":
