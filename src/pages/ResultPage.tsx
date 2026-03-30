@@ -210,6 +210,28 @@ export function ResultPage() {
         </section>
       )}
 
+      {/* Feedback survey */}
+      <div className="text-center mb-8">
+        <a
+          href="https://forms.gle/tCMnHD29TyUzb7B3A"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="
+            inline-flex items-center justify-center w-full
+            rounded-xl font-medium transition-all duration-200
+            focus:outline-none focus-visible:ring-2 focus-visible:ring-cafe-400 focus-visible:ring-offset-2
+            hover:scale-[1.02] active:scale-[0.98]
+            border-2 border-cafe-600 text-cafe-700 hover:bg-cafe-100 active:bg-cafe-200
+            px-6 py-3 text-base
+          "
+        >
+          {t("feedback.surveyButton")}
+        </a>
+        <p className="mt-2 text-xs text-stone-400">
+          {t("feedback.surveyNote")}
+        </p>
+      </div>
+
       {/* Actions */}
       <div className="flex flex-col gap-3">
         <Button
