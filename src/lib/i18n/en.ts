@@ -560,6 +560,26 @@ export const en: Translations = {
   "brewingGuide.noGuides": "No guides available for this roast level yet",
   "result.viewBrewingGuide": "See brewing guide for this roast",
 
+  // nav stats
+  "nav.stats": "Stats",
+
+  // stats
+  "stats.title": "Diagnosis Stats",
+  "stats.subtitle": "Visualize your diagnosis trends",
+  "stats.empty": "No diagnosis data yet",
+  "stats.emptyDesc": "Take a diagnosis to get started!",
+  "stats.startDiagnosis": "Start Diagnosis",
+  "stats.backHome": "Back to Home",
+  "stats.totalDiagnoses": "Total Diagnoses",
+  "stats.topCoffee": "Most Recommended",
+  "stats.favoriteRoast": "Preferred Roast",
+  "stats.averageProfile": "Average Flavor Profile",
+  "stats.topCoffees": "Top Recommended Coffees",
+  "stats.roastDistribution": "Roast Level Distribution",
+  "stats.brewingDistribution": "Brewing Method Distribution",
+  "stats.flavorTrend": "Flavor Trend",
+  "stats.viewHistory": "View History",
+
   // seasonal
   "seasonal.title": "Seasonal Picks",
   "seasonal.recommendedCoffees": "Recommended Coffees",

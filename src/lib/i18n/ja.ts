@@ -561,6 +561,26 @@ export const ja: Translations = {
   "brewingGuide.noGuides": "この焙煎度のガイドはまだありません",
   "result.viewBrewingGuide": "この焙煎度の淹れ方を見る",
 
+  // nav stats
+  "nav.stats": "統計",
+
+  // stats
+  "stats.title": "診断統計",
+  "stats.subtitle": "あなたの診断傾向を可視化",
+  "stats.empty": "まだ診断データがありません",
+  "stats.emptyDesc": "診断してみましょう！",
+  "stats.startDiagnosis": "診断する",
+  "stats.backHome": "ホームに戻る",
+  "stats.totalDiagnoses": "総診断回数",
+  "stats.topCoffee": "最多推薦コーヒー",
+  "stats.favoriteRoast": "好みの焙煎度",
+  "stats.averageProfile": "平均味覚プロファイル",
+  "stats.topCoffees": "よく推薦されるコーヒー TOP5",
+  "stats.roastDistribution": "焙煎度の分布",
+  "stats.brewingDistribution": "抽出方法の分布",
+  "stats.flavorTrend": "味覚の変遷",
+  "stats.viewHistory": "診断履歴を見る",
+
   // seasonal
   "seasonal.title": "季節のおすすめ",
   "seasonal.recommendedCoffees": "おすすめコーヒー",
