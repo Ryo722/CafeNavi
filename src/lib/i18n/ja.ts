@@ -626,6 +626,10 @@ export const ja: Translations = {
   "strategy.v1": "v1（旧）",
   "strategy.v2": "v2（新）",
 
+  // feedback
+  "feedback.surveyButton": "📝 アンケートに回答する",
+  "feedback.surveyNote": "1-2分で完了します",
+
   // date format
   "date.format": "{{y}}年{{m}}月{{d}}日 {{h}}:{{min}}",
 };

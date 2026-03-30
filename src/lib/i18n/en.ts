@@ -625,6 +625,10 @@ export const en: Translations = {
   "strategy.v1": "v1 (Legacy)",
   "strategy.v2": "v2 (New)",
 
+  // feedback
+  "feedback.surveyButton": "📝 Take a Survey",
+  "feedback.surveyNote": "Takes 1-2 minutes",
+
   // date format
   "date.format": "{{m}}/{{d}}/{{y}} {{h}}:{{min}}",
 };
