@@ -1,5 +1,6 @@
 import type { CoffeeProfile } from "../../types/coffee";
 import { Card } from "../ui/Card";
+import { useTranslation } from "../../lib/i18n";
 
 type CoffeeCardProps = {
   coffee: CoffeeProfile;
@@ -10,6 +11,7 @@ type CoffeeCardProps = {
 
 export function CoffeeCard({ coffee, score, reasons, rank }: CoffeeCardProps) {
   const isFirst = rank === 1;
+  const { t } = useTranslation();
 
   return (
     <Card
@@ -30,7 +32,7 @@ export function CoffeeCard({ coffee, score, reasons, rank }: CoffeeCardProps) {
             <h3
               className={`font-bold text-cafe-900 ${isFirst ? "text-xl" : "text-base"}`}
             >
-              {coffee.nameJa}
+              {t(`coffee.${coffee.id}.name`)}
             </h3>
             <p className="text-xs text-stone-500">{coffee.origins.join(", ")}</p>
           </div>
@@ -41,12 +43,12 @@ export function CoffeeCard({ coffee, score, reasons, rank }: CoffeeCardProps) {
           >
             {score}%
           </span>
-          <p className="text-xs text-stone-400">マッチ度</p>
+          <p className="text-xs text-stone-400">{t("result.matchScore")}</p>
         </div>
       </div>
 
       <p className="text-sm text-stone-600 mb-3 leading-relaxed">
-        {coffee.description}
+        {t(`coffee.${coffee.id}.description`)}
       </p>
 
       {/* Reasons */}
@@ -67,7 +69,7 @@ export function CoffeeCard({ coffee, score, reasons, rank }: CoffeeCardProps) {
               key={note}
               className="text-xs bg-cafe-50 text-cafe-700 px-2 py-0.5 rounded-full border border-cafe-200"
             >
-              {note}
+              {t(`note.${note}`)}
             </span>
           ))}
         </div>

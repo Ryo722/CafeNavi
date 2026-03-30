@@ -12,19 +12,20 @@ import { FlavorRadarChart } from "../components/charts/FlavorRadarChart";
 import { Card } from "../components/ui/Card";
 import { saveDiagnosis } from "../lib/storage";
 import type { DiagnosisRecord } from "../lib/storage";
+import { useTranslation } from "../lib/i18n";
 
 type LocationState = {
   result: RecommendationResult;
   userProfile: FlavorScores;
   input: TasteProfileInput;
   mode?: UserMode;
-  /** 履歴から閲覧する場合にセットされる */
   fromHistory?: boolean;
 };
 
 export function ResultPage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const state = location.state as LocationState | null;
   const [saved, setSaved] = useState(false);
   const savedRef = useRef(false);
@@ -35,7 +36,6 @@ export function ResultPage() {
     }
   }, [state, navigate]);
 
-  // 自動保存（履歴からの閲覧時は保存しない）
   useEffect(() => {
     if (!state || state.fromHistory || savedRef.current) return;
     savedRef.current = true;
@@ -59,7 +59,6 @@ export function ResultPage() {
 
   const { result, userProfile } = state;
 
-  // Find top coffee profile for radar chart overlay
   const topCoffee = result.topMatches[0]
     ? coffeeProfiles.find((p) => p.id === result.topMatches[0].coffeeId)
     : undefined;
@@ -71,25 +70,25 @@ export function ResultPage() {
           ☕
         </p>
         <h1 className="text-2xl font-serif font-bold text-cafe-900 mb-1">
-          診断結果
+          {t("result.title")}
         </h1>
         <p className="text-sm text-stone-500">
-          あなたにぴったりのコーヒーが見つかりました
+          {t("result.subtitle")}
         </p>
         {saved && (
           <p className="mt-2 text-xs text-cafe-600 animate-pulse">
-            履歴に保存しました
+            {t("result.saved")}
           </p>
         )}
         {state.fromHistory && (
           <p className="mt-2 text-xs text-stone-400">
-            保存済みの診断結果
+            {t("result.fromHistory")}
           </p>
         )}
       </div>
 
       {/* Top matches */}
-      <section className="space-y-4 mb-8" aria-label="おすすめコーヒー">
+      <section className="space-y-4 mb-8" aria-label={t("result.sectionRecommended")}>
         {result.topMatches.map((match, i) => {
           const coffee = coffeeProfiles.find((p) => p.id === match.coffeeId);
           if (!coffee) return null;
@@ -106,20 +105,20 @@ export function ResultPage() {
       </section>
 
       {/* Flavor radar chart */}
-      <section className="mb-8" aria-label="味覚プロファイル">
+      <section className="mb-8" aria-label={t("result.sectionFlavorProfile")}>
         <Card>
           <h3 className="text-lg font-bold text-cafe-800 mb-2 text-center">
-            味覚プロファイル
+            {t("result.sectionFlavorProfile")}
           </h3>
           <div className="flex items-center justify-center gap-4 mb-2 text-xs text-stone-500">
             <span className="flex items-center gap-1">
               <span className="inline-block w-3 h-3 rounded-sm bg-cafe-500/25 border border-cafe-600" />
-              あなた
+              {t("result.you")}
             </span>
             {topCoffee && (
               <span className="flex items-center gap-1">
                 <span className="inline-block w-3 h-3 rounded-sm bg-[rgba(180,120,60,0.15)] border border-[#b4783c] border-dashed" />
-                {topCoffee.nameJa}
+                {t(`coffee.${topCoffee.id}.name`)}
               </span>
             )}
           </div>
@@ -131,7 +130,7 @@ export function ResultPage() {
       </section>
 
       {/* Brewing recommendation */}
-      <section className="mb-8" aria-label="おすすめ設定">
+      <section className="mb-8" aria-label={t("result.sectionBrewing")}>
         <BrewingRecommendation
           roast={result.recommendedRoast}
           grind={result.recommendedGrind}
@@ -140,16 +139,16 @@ export function ResultPage() {
       </section>
 
       {/* Pairings */}
-      <section className="mb-8" aria-label="相性の良いお菓子">
+      <section className="mb-8" aria-label={t("result.sectionPairing")}>
         <PairingList pairings={result.pairingSuggestions} />
       </section>
 
       {/* Avoid notes */}
       {result.avoidNotes.length > 0 && (
-        <section className="mb-8" aria-label="避けた方がよい傾向">
+        <section className="mb-8" aria-label={t("result.sectionAvoid")}>
           <Card>
             <h3 className="text-lg font-bold text-cafe-800 mb-3">
-              避けた方がよい傾向
+              {t("result.sectionAvoid")}
             </h3>
             <div className="space-y-2">
               {result.avoidNotes.map((note, i) => (
@@ -172,21 +171,21 @@ export function ResultPage() {
           onClick={() => navigate("/")}
           className="w-full"
         >
-          もう一度診断する
+          {t("result.retryDiagnosis")}
         </Button>
         <Button
           variant="ghost"
           onClick={() => navigate("/guide")}
           className="w-full"
         >
-          コーヒーガイドを見る
+          {t("result.viewGuide")}
         </Button>
         <Button
           variant="ghost"
           onClick={() => navigate("/history")}
           className="w-full"
         >
-          診断履歴を見る
+          {t("result.viewHistory")}
         </Button>
       </div>
     </div>
