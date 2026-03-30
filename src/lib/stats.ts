@@ -26,6 +26,8 @@ const FLAVOR_KEYS: (keyof FlavorScores)[] = [
   "chocolaty",
   "roastiness",
   "cleanness",
+  "aftertaste",
+  "balance",
 ];
 
 function emptyFlavorScores(): FlavorScores {
@@ -40,6 +42,8 @@ function emptyFlavorScores(): FlavorScores {
     chocolaty: 0,
     roastiness: 0,
     cleanness: 0,
+    aftertaste: 0,
+    balance: 0,
   };
 }
 

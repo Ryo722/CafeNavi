@@ -18,6 +18,8 @@ function createProfile(overrides: Partial<FlavorScores> = {}): FlavorScores {
     chocolaty: 5,
     roastiness: 5,
     cleanness: 5,
+    aftertaste: 5,
+    balance: 5,
     ...overrides,
   };
 }

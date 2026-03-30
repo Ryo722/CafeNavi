@@ -1,17 +1,12 @@
 import type {
-  BrewingMethod,
   CoffeeProfile,
   FlavorScores,
-  GrindSize,
   RecommendationResult,
-  RoastLevel,
 } from "../types/coffee";
 import type { TasteProfileInput } from "../types/questionnaire";
 import type { Locale } from "./i18n/types";
 import { coffeeProfiles } from "../data/coffeeProfiles";
-import { pairingByRoast } from "../data/pairingData";
-import { calculateUserFlavorProfile } from "./scoring";
-import { getTopRecommendations } from "./similarity";
+import { runRecommendationPipeline } from "./recommendation";
 import { ja } from "./i18n/ja";
 import { en } from "./i18n/en";
 
@@ -28,6 +23,7 @@ function tl(locale: Locale, key: string, params?: Record<string, string>): strin
 
 /**
  * 推薦理由を生成する。locale に応じて日本語/英語で返す。
+ * (旧パイプライン用に残存。新パイプラインではreasonGeneratorを使用)
  */
 export function generateRecommendationReasons(
   userInput: TasteProfileInput,
@@ -163,109 +159,17 @@ export function generateAvoidNotes(
 }
 
 /**
- * ユーザーのスコアから最適な焙煎度を判定する。
- */
-function recommendRoastLevel(profile: FlavorScores): RoastLevel {
-  const darkScore = profile.bitterness + profile.roastiness + profile.body;
-  const lightScore = profile.acidity + profile.fruitiness + profile.floral;
-
-  const diff = darkScore - lightScore;
-
-  if (diff >= 8) return "dark";
-  if (diff >= 4) return "medium-dark";
-  if (diff >= -2) return "medium";
-  if (diff >= -6) return "medium-light";
-  return "light";
-}
-
-/**
- * ユーザーのスコアと焙煎度から抽出方法を推薦する。
- */
-function recommendBrewingMethods(
-  profile: FlavorScores,
-): BrewingMethod[] {
-  const methods: { method: BrewingMethod; score: number }[] = [
-    {
-      method: "espresso",
-      score: profile.body * 1.5 + profile.bitterness + profile.roastiness,
-    },
-    {
-      method: "handDrip",
-      score: profile.cleanness * 1.5 + profile.acidity + profile.floral,
-    },
-    {
-      method: "frenchPress",
-      score: profile.body * 1.5 + profile.sweetness + profile.nuttiness,
-    },
-    {
-      method: "coldBrew",
-      score: profile.cleanness + profile.sweetness * 1.5 + (10 - profile.bitterness),
-    },
-  ];
-
-  methods.sort((a, b) => b.score - a.score);
-
-  // 上位2つを推薦
-  return methods.slice(0, 2).map((m) => m.method);
-}
-
-/**
- * 推薦された抽出方法に合わせて挽き目を決定する。
- */
-function recommendGrindSize(method: BrewingMethod): GrindSize {
-  const grindMap: Record<BrewingMethod, GrindSize> = {
-    espresso: "fine",
-    handDrip: "medium-fine",
-    frenchPress: "coarse",
-    coldBrew: "coarse",
-  };
-  return grindMap[method];
-}
-
-/**
  * 全ての推薦ロジックを統合して最終結果を返す。
+ * 新パイプラインを使用し、既存のRecommendationResult型と互換の結果を返す。
  */
 export function getFullRecommendation(
   input: TasteProfileInput,
   profiles: CoffeeProfile[] = coffeeProfiles,
-  locale: Locale = "ja",
+  _locale: Locale = "ja",
 ): RecommendationResult {
-  // ユーザーの味覚プロファイルを算出
-  const userProfile = calculateUserFlavorProfile(input);
+  // 新パイプラインを実行
+  const pipelineResult = runRecommendationPipeline(input, profiles);
 
-  // トップマッチを取得
-  const topMatches = getTopRecommendations(userProfile, profiles, 3);
-
-  // 各マッチに推薦理由を付与
-  const topMatchesWithReasons = topMatches.map((match) => {
-    const coffee = profiles.find((p) => p.id === match.coffeeId);
-    const reasons = coffee
-      ? generateRecommendationReasons(input, userProfile, coffee, locale)
-      : [tl(locale, "reason.fallback")];
-    return { ...match, reasons };
-  });
-
-  // 焙煎度推薦
-  const recommendedRoast = recommendRoastLevel(userProfile);
-
-  // 抽出方法推薦
-  const recommendedBrewingMethods = recommendBrewingMethods(userProfile);
-
-  // 挽き目推薦（第一推薦の抽出方法に基づく）
-  const recommendedGrind = recommendGrindSize(recommendedBrewingMethods[0]);
-
-  // ペアリング推薦
-  const pairingSuggestions = pairingByRoast[recommendedRoast] ?? [];
-
-  // 避けた方がよいノート
-  const avoidNotes = generateAvoidNotes(userProfile, locale);
-
-  return {
-    topMatches: topMatchesWithReasons,
-    recommendedRoast,
-    recommendedGrind,
-    recommendedBrewingMethods,
-    pairingSuggestions,
-    avoidNotes,
-  };
+  // パイプラインの結果を返す（既存RecommendationResult互換）
+  return pipelineResult.recommendation;
 }

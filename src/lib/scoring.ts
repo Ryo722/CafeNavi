@@ -40,6 +40,8 @@ export function calculateUserFlavorProfile(
     chocolaty: scaleToTen(input.chocolatePreference),
     roastiness: scaleToTen(input.roastedPreference),
     cleanness: 5, // デフォルト中間値
+    aftertaste: 5, // デフォルト中間値（余韻）
+    balance: 5,    // デフォルト中間値（バランス）
   };
 
   // 2. dessertPreference から修正値を加算
