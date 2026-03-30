@@ -609,6 +609,22 @@ export const en: Translations = {
   "seasonal.pairings": "Seasonal Pairings",
   "seasonal.moreLink": "Explore more coffees for this season",
 
+  // serendipity (adventure slot)
+  "result.serendipityLabel": "\uD83C\uDFB2 Try Something Different",
+
+  // cold start
+  "coldStart.title": "Popular for Beginners",
+  "coldStart.description": "Well-balanced coffees that are easy to enjoy, even for coffee beginners.",
+  "coldStart.fallbackReason": "A well-balanced coffee recommended for beginners",
+
+  // seasonal bonus reason
+  "reason.seasonalBonus": "A perfect pick for this season",
+
+  // A/B test strategy
+  "strategy.label": "Recommendation Engine",
+  "strategy.v1": "v1 (Legacy)",
+  "strategy.v2": "v2 (New)",
+
   // date format
   "date.format": "{{m}}/{{d}}/{{y}} {{h}}:{{min}}",
 };

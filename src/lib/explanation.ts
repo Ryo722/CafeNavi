@@ -5,6 +5,7 @@ import type {
 } from "../types/coffee";
 import type { TasteProfileInput } from "../types/questionnaire";
 import type { Locale } from "./i18n/types";
+import type { RecommendationStrategy } from "./recommendation/types";
 import { coffeeProfiles } from "../data/coffeeProfiles";
 import { runRecommendationPipeline } from "./recommendation";
 import { ja } from "./i18n/ja";
@@ -166,9 +167,10 @@ export function getFullRecommendation(
   input: TasteProfileInput,
   profiles: CoffeeProfile[] = coffeeProfiles,
   _locale: Locale = "ja",
+  strategy: RecommendationStrategy = "v2",
 ): RecommendationResult {
-  // 新パイプラインを実行
-  const pipelineResult = runRecommendationPipeline(input, profiles);
+  // 新パイプラインを実行（ストラテジー対応）
+  const pipelineResult = runRecommendationPipeline(input, profiles, null, { strategy });
 
   // パイプラインの結果を返す（既存RecommendationResult互換）
   return pipelineResult.recommendation;

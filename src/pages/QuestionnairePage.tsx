@@ -7,6 +7,7 @@ import {
 } from "../features/questionnaire/questions";
 import { getFullRecommendation } from "../lib/explanation";
 import { calculateUserFlavorProfile } from "../lib/scoring";
+import { getActiveStrategy } from "../lib/strategyStorage";
 import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
 import { PageTransition } from "../components/ui/PageTransition";
@@ -98,7 +99,13 @@ export function QuestionnairePage() {
 
   const goNext = () => {
     if (isLast) {
-      const result = getFullRecommendation(input, undefined, locale);
+      // URLパラメータからストラテジーを取得、なければLocalStorage/デフォルト
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlStrategy = urlParams.get("strategy");
+      const strategy = (urlStrategy === "v1" || urlStrategy === "v2")
+        ? urlStrategy
+        : getActiveStrategy();
+      const result = getFullRecommendation(input, undefined, locale, strategy);
       const userProfile = calculateUserFlavorProfile(input);
       navigate("/result", { state: { result, userProfile, input, mode } });
     } else {

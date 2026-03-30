@@ -101,13 +101,21 @@ export function ResultPage() {
             const coffee = coffeeProfiles.find((p) => p.id === match.coffeeId);
             if (!coffee) return null;
             return (
-              <CoffeeCard
-                key={match.coffeeId}
-                coffee={coffee}
-                score={match.score}
-                reasons={match.reasons}
-                rank={i + 1}
-              />
+              <div key={match.coffeeId}>
+                {match.isSerendipity && (
+                  <div className="mb-2 px-3 py-1.5 bg-amber-50 border border-amber-200 rounded-xl text-center">
+                    <span className="text-sm font-bold text-amber-700">
+                      {t("result.serendipityLabel")}
+                    </span>
+                  </div>
+                )}
+                <CoffeeCard
+                  coffee={coffee}
+                  score={match.score}
+                  reasons={match.reasons}
+                  rank={i + 1}
+                />
+              </div>
             );
           })}
         </AnimatedList>

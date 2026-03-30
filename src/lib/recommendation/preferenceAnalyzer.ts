@@ -1,6 +1,6 @@
 import type { FlavorScores } from "../../types/coffee";
 import type { TasteProfileInput } from "../../types/questionnaire";
-import type { AnalyzedPreference, DrinkStyle, SceneFactor } from "./types";
+import type { AnalyzedPreference, DrinkStyle, SceneFactor, DislikeMap, DislikeLevel } from "./types";
 import {
   dessertToFlavorMap,
   sceneToFlavorMap,
@@ -40,6 +40,40 @@ function detectDislikes(input: TasteProfileInput): Partial<Record<keyof FlavorSc
   if (input.roastedPreference <= 2) flags.roastiness = true;
 
   return flags;
+}
+
+/**
+ * 2段階Dislikeマップを生成する。
+ * スライダー値1 → hardDislike（絶対NG）
+ * スライダー値2 → softDislike（やや苦手）
+ */
+function detectDislikeMap(input: TasteProfileInput): DislikeMap {
+  const map: DislikeMap = {};
+
+  const mappings: { field: keyof TasteProfileInput; flavor: keyof FlavorScores }[] = [
+    { field: "bitternessPreference", flavor: "bitterness" },
+    { field: "acidityPreference", flavor: "acidity" },
+    { field: "sweetnessPreference", flavor: "sweetness" },
+    { field: "bodyPreference", flavor: "body" },
+    { field: "fruityPreference", flavor: "fruitiness" },
+    { field: "floralPreference", flavor: "floral" },
+    { field: "nuttyPreference", flavor: "nuttiness" },
+    { field: "chocolatePreference", flavor: "chocolaty" },
+    { field: "roastedPreference", flavor: "roastiness" },
+  ];
+
+  for (const { field, flavor } of mappings) {
+    const val = input[field] as number;
+    let level: DislikeLevel = "none";
+    if (val === 1) level = "hard";
+    else if (val === 2) level = "soft";
+
+    if (level !== "none") {
+      map[flavor] = level;
+    }
+  }
+
+  return map;
 }
 
 /** シーン要因を抽出 */
@@ -130,5 +164,6 @@ export function analyzePreferences(input: TasteProfileInput): AnalyzedPreference
     drinkStyle: determineDrinkStyle(input),
     combinedProfile: combined,
     dislikeFlags: detectDislikes(input),
+    dislikeMap: detectDislikeMap(input),
   };
 }

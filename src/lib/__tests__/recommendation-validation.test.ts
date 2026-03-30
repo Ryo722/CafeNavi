@@ -481,14 +481,18 @@ describe("推薦パイプラインバリデーション", () => {
 
   // 追加: 全テストケースで推薦結果の整合性チェック
   describe("全テストケースの整合性", () => {
-    it("全ケースでtopMatchesが3件かつスコア降順", () => {
+    it("全ケースでtopMatchesが3件かつ非冒険枠はスコア降順", () => {
       for (const testCase of validationCases) {
         const result = runRecommendationPipeline(testCase.input, coffeeProfiles);
         expect(result.recommendation.topMatches).toHaveLength(3);
 
-        for (let i = 0; i < result.recommendation.topMatches.length - 1; i++) {
-          expect(result.recommendation.topMatches[i].score).toBeGreaterThanOrEqual(
-            result.recommendation.topMatches[i + 1].score,
+        // 冒険枠（serendipity）を除外したスコアが降順であることを確認
+        const nonSerendipityMatches = result.recommendation.topMatches.filter(
+          (m) => !m.isSerendipity,
+        );
+        for (let i = 0; i < nonSerendipityMatches.length - 1; i++) {
+          expect(nonSerendipityMatches[i].score).toBeGreaterThanOrEqual(
+            nonSerendipityMatches[i + 1].score,
           );
         }
       }

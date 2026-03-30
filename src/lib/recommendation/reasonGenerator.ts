@@ -1,5 +1,6 @@
 import type { CoffeeProfile, RoastLevel } from "../../types/coffee";
 import type { AnalyzedPreference, RoastEstimation } from "./types";
+import { getCurrentSeason } from "./finalRanker";
 
 type ReasonTemplate = {
   id: string;
@@ -235,6 +236,26 @@ const templates: ReasonTemplate[] = [
       return `${c.nameJa}は${highlights.slice(0, 3).join("・")}が特徴の産地です`;
     },
     priority: 30,
+  },
+
+  // === 季節ボーナス理由 ===
+  {
+    id: "seasonal-match",
+    condition: (_, c) => {
+      const season = getCurrentSeason();
+      return c.seasonalAffinity?.includes(season) ?? false;
+    },
+    generate: (_, c) => {
+      const seasonNameMap: Record<string, string> = {
+        spring: "春",
+        summer: "夏",
+        autumn: "秋",
+        winter: "冬",
+      };
+      const season = getCurrentSeason();
+      return `${c.nameJa}は${seasonNameMap[season]}にぴったりの味わいです`;
+    },
+    priority: 6,
   },
 ];
 

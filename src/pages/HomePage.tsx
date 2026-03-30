@@ -7,6 +7,7 @@ import { useTranslation } from "../lib/i18n";
 import { getSeasonalRecommendation } from "../data/seasonalRecommendations";
 import type { Season } from "../data/seasonalRecommendations";
 import { coffeeProfiles } from "../data/coffeeProfiles";
+import { getColdStartRecommendations } from "../lib/recommendation/coldStart";
 
 const seasonStyles: Record<
   Season,
@@ -53,6 +54,8 @@ export function HomePage() {
         .slice(0, 3),
     [seasonal.recommendedCoffeeIds],
   );
+
+  const coldStartCoffees = useMemo(() => getColdStartRecommendations(), []);
 
   const seasonName = locale === "ja" ? seasonal.nameJa : seasonal.nameEn;
   const mood = locale === "ja" ? seasonal.mood : seasonal.moodEn;
@@ -161,6 +164,46 @@ export function HomePage() {
         >
           {t("seasonal.moreLink")} →
         </Link>
+      </section>
+
+      {/* Cold Start: Popular coffees for beginners */}
+      <section
+        className="rounded-2xl bg-cafe-50 border border-cafe-200 p-5 mb-8"
+        aria-label={t("coldStart.title")}
+      >
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-2xl" aria-hidden="true">
+            &#9749;
+          </span>
+          <h2 className="text-xl font-bold text-cafe-800">
+            {t("coldStart.title")}
+          </h2>
+        </div>
+        <p className="text-sm text-stone-600 leading-relaxed mb-4">
+          {t("coldStart.description")}
+        </p>
+        <div className="space-y-2">
+          {coldStartCoffees.slice(0, 3).map((coffee) => (
+            <div
+              key={coffee.id}
+              className="bg-white/70 rounded-xl p-3 border border-white/50"
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-bold text-cafe-800 text-sm">
+                    {locale === "ja" ? coffee.nameJa : coffee.name}
+                  </p>
+                  <p className="text-xs text-stone-500">
+                    {t(`roastLevel.${coffee.roastLevel}`)}
+                  </p>
+                </div>
+                <span className="text-xs text-stone-400">
+                  {coffee.origins.join(", ")}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* Mode selection */}

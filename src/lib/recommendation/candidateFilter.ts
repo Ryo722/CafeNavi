@@ -1,5 +1,5 @@
 import type { CoffeeProfile, FlavorScores, RoastLevel } from "../../types/coffee";
-import type { AnalyzedPreference, RoastEstimation, FilteredCandidates } from "./types";
+import type { AnalyzedPreference, RoastEstimation, FilteredCandidates, DislikeMap } from "./types";
 
 /** 焙煎度の数値順 */
 const ROAST_ORDER: Record<RoastLevel, number> = {
@@ -15,7 +15,44 @@ function roastDistance(a: RoastLevel, b: RoastLevel): number {
   return Math.abs(ROAST_ORDER[a] - ROAST_ORDER[b]);
 }
 
-/** dislikeフラグとコーヒーのフレーバースコアを照合し、除外理由を返す */
+const DISLIKE_LABEL: Record<keyof FlavorScores, string> = {
+  bitterness: "苦味",
+  acidity: "酸味",
+  sweetness: "甘み",
+  body: "ボディ",
+  fruitiness: "フルーティさ",
+  floral: "フローラルさ",
+  nuttiness: "ナッツ感",
+  chocolaty: "チョコ感",
+  roastiness: "焙煎感",
+  cleanness: "クリーンさ",
+  aftertaste: "余韻",
+  balance: "バランス",
+};
+
+/**
+ * 2段階Dislike対応のフィルタ。
+ * hardDislike（スライダー1）の軸がスコア7以上 → 除外
+ * softDislikeはペナルティのみ（finalRankerで適用）なのでここでは除外しない
+ */
+function checkHardDislikeConflict(
+  dislikeMap: DislikeMap,
+  coffee: CoffeeProfile,
+): string | null {
+  const HARD_THRESHOLD = 7;
+
+  for (const [key, level] of Object.entries(dislikeMap)) {
+    if (level !== "hard") continue;
+    const k = key as keyof FlavorScores;
+    if (coffee.flavorScores[k] >= HARD_THRESHOLD) {
+      return `${DISLIKE_LABEL[k]}が強すぎるため除外（hardDislike）`;
+    }
+  }
+
+  return null;
+}
+
+/** dislikeフラグとコーヒーのフレーバースコアを照合し、除外理由を返す（後方互換） */
 function checkDislikeConflict(
   dislikeFlags: Partial<Record<keyof FlavorScores, boolean>>,
   coffee: CoffeeProfile,
@@ -60,11 +97,31 @@ export function filterCandidates(
   const excluded: { profile: CoffeeProfile; reason: string }[] = [];
 
   for (const coffee of profiles) {
-    // dislikeチェック
-    const dislikeReason = checkDislikeConflict(pref.dislikeFlags, coffee);
-    if (dislikeReason) {
-      excluded.push({ profile: coffee, reason: dislikeReason });
-      continue;
+    // 2段階Dislike: hardDislikeチェック（優先）
+    if (pref.dislikeMap) {
+      const hardReason = checkHardDislikeConflict(pref.dislikeMap, coffee);
+      if (hardReason) {
+        excluded.push({ profile: coffee, reason: hardReason });
+        continue;
+      }
+    }
+
+    // レガシーのdislikeチェック（dislikeMapがない場合のフォールバック）
+    if (!pref.dislikeMap) {
+      const dislikeReason = checkDislikeConflict(pref.dislikeFlags, coffee);
+      if (dislikeReason) {
+        excluded.push({ profile: coffee, reason: dislikeReason });
+        continue;
+      }
+    }
+
+    // dislikeMapがある場合でも、旧ロジックのbody>=8チェックは保持
+    if (pref.dislikeMap && pref.dislikeFlags.body && coffee.flavorScores.body >= 8) {
+      const level = pref.dislikeMap.body;
+      if (level === "hard") {
+        excluded.push({ profile: coffee, reason: "ボディが重すぎるため除外（hardDislike）" });
+        continue;
+      }
     }
 
     // 焙煎度による振り分け

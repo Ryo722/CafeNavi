@@ -6,13 +6,18 @@ import type {
   GrindSize,
 } from "../../types/coffee";
 import type { TasteProfileInput } from "../../types/questionnaire";
-import type { RankedResult, AnalyzedPreference, RoastEstimation, WeightAdjustments } from "./types";
+import type { RankedResult, AnalyzedPreference, RoastEstimation, WeightAdjustments, RecommendationStrategy } from "./types";
 import { analyzePreferences } from "./preferenceAnalyzer";
 import { estimateRoastLevel } from "./roastEstimator";
 import { filterCandidates } from "./candidateFilter";
 import { rankCandidates } from "./finalRanker";
 import { generateReasons } from "./reasonGenerator";
 import { pairingByRoast } from "../../data/pairingData";
+import { selectSerendipityCandidate } from "./serendipity";
+import { isColdStartInput, getColdStartRecommendations } from "./coldStart";
+import { getTopRecommendations, calculateSimilarity } from "../similarity";
+import { calculateUserFlavorProfile } from "../scoring";
+import type { DiagnosisRecord } from "../storage";
 
 export type PipelineResult = {
   /** 既存互換の RecommendationResult */
@@ -23,6 +28,13 @@ export type PipelineResult = {
   preference: AnalyzedPreference;
   /** 焙煎度推定の結果 */
   roastEstimation: RoastEstimation;
+  /** コールドスタートが発動したかどうか */
+  isColdStart?: boolean;
+};
+
+export type PipelineOptions = {
+  strategy?: RecommendationStrategy;
+  userHistory?: DiagnosisRecord[];
 };
 
 /**
@@ -39,7 +51,20 @@ export function runRecommendationPipeline(
   input: TasteProfileInput,
   profiles: CoffeeProfile[],
   feedbackWeights: WeightAdjustments | null = null,
+  options: PipelineOptions = {},
 ): PipelineResult {
+  const strategy = options.strategy ?? "v2";
+
+  // v1 ストラテジー: 旧ロジック（コサイン類似度のみ）
+  if (strategy === "v1") {
+    return runV1Pipeline(input, profiles);
+  }
+
+  // コールドスタート判定
+  if (isColdStartInput(input)) {
+    return runColdStartPipeline(input, profiles);
+  }
+
   // Step 1: 嗜好分析
   const preference = analyzePreferences(input);
 
@@ -49,12 +74,37 @@ export function runRecommendationPipeline(
   // Step 3: 候補絞り込み
   const candidates = filterCandidates(preference, roastEstimation, profiles);
 
-  // Step 4 & 5: 最終ランキング（内部で抽出方法も選択）
-  const ranked = rankCandidates(candidates, preference, roastEstimation, feedbackWeights, 3);
+  // Step 4 & 5: 最終ランキング（内部で抽出方法も選択 + 季節ボーナス + softDislikeペナルティ）
+  // 冒険枠のために多めに取得
+  const allRanked = rankCandidates(candidates, preference, roastEstimation, feedbackWeights, 10);
 
   // Step 6: 推薦理由生成
-  for (const result of ranked) {
+  for (const result of allRanked) {
     result.reasons = generateReasons(preference, roastEstimation, result.coffee, result.score);
+    // 季節ボーナス理由はreasonGeneratorのテンプレートで自動追加される
+  }
+
+  // 上位2枠 + 冒険枠
+  const top2 = allRanked.slice(0, 2);
+
+  // Serendipity枠: 3枠目を冒険枠にする
+  const serendipityCandidate = selectSerendipityCandidate(
+    allRanked,
+    allRanked,
+    options.userHistory,
+  );
+
+  let ranked: RankedResult[];
+  if (serendipityCandidate) {
+    // 冒険枠に推薦理由を追加
+    serendipityCandidate.reasons = [
+      ...generateReasons(preference, roastEstimation, serendipityCandidate.coffee, serendipityCandidate.score),
+      "いつもとは違う味わいを試してみませんか？",
+    ];
+    ranked = [...top2, serendipityCandidate];
+  } else {
+    // 冒険枠がない場合は通常の3位
+    ranked = allRanked.slice(0, 3);
   }
 
   // 既存互換のRecommendationResultに変換
@@ -62,6 +112,7 @@ export function runRecommendationPipeline(
     coffeeId: r.coffeeId,
     score: r.score,
     reasons: r.reasons,
+    isSerendipity: r.isSerendipity,
   }));
 
   const recommendedRoast: RoastLevel = roastEstimation.primary;
@@ -100,6 +151,102 @@ export function runRecommendationPipeline(
   };
 }
 
+/**
+ * v1 ストラテジー: 旧ロジック（コサイン類似度のみ）
+ */
+function runV1Pipeline(
+  input: TasteProfileInput,
+  profiles: CoffeeProfile[],
+): PipelineResult {
+  const preference = analyzePreferences(input);
+  const roastEstimation = estimateRoastLevel(preference);
+  const userProfile = calculateUserFlavorProfile(input);
+
+  const topResults = getTopRecommendations(userProfile, profiles, 3);
+
+  const ranked: RankedResult[] = topResults.map((r) => {
+    const coffee = profiles.find((p) => p.id === r.coffeeId)!;
+    return {
+      coffeeId: r.coffeeId,
+      coffee,
+      score: r.score,
+      reasons: generateReasons(preference, roastEstimation, coffee, r.score),
+      brewing: { methods: [] },
+    } as unknown as RankedResult;
+  });
+
+  const topMatches = ranked.map((r) => ({
+    coffeeId: r.coffeeId,
+    score: r.score,
+    reasons: r.reasons,
+  }));
+
+  const pairingSuggestions = pairingByRoast[roastEstimation.primary] ?? [];
+
+  const recommendation: RecommendationResult = {
+    topMatches,
+    recommendedRoast: roastEstimation.primary,
+    recommendedGrind: "medium",
+    recommendedBrewingMethods: ["handDrip"],
+    pairingSuggestions,
+    avoidNotes: [],
+  };
+
+  return { recommendation, ranked, preference, roastEstimation };
+}
+
+/**
+ * コールドスタートパイプライン: デフォルト入力の場合のフォールバック
+ */
+function runColdStartPipeline(
+  input: TasteProfileInput,
+  profiles: CoffeeProfile[],
+): PipelineResult {
+  const preference = analyzePreferences(input);
+  const roastEstimation = estimateRoastLevel(preference);
+
+  const coldStartCoffees = getColdStartRecommendations(profiles);
+
+  const scoredCoffees = coldStartCoffees.map((coffee) => {
+    const score = calculateSimilarity(preference.combinedProfile, coffee.flavorScores);
+    return { coffee, score };
+  });
+  // スコア降順でソート
+  scoredCoffees.sort((a, b) => b.score - a.score);
+
+  const ranked: RankedResult[] = scoredCoffees.slice(0, 3).map(({ coffee, score }) => {
+    return {
+      coffeeId: coffee.id,
+      coffee,
+      score,
+      reasons: [
+        `${coffee.nameJa}は初めての方にもおすすめのバランスの良いコーヒーです`,
+        ...generateReasons(preference, roastEstimation, coffee, score),
+      ].slice(0, 4),
+      brewing: { methods: [] },
+    } as unknown as RankedResult;
+  });
+
+  const topMatches = ranked.map((r) => ({
+    coffeeId: r.coffeeId,
+    score: r.score,
+    reasons: r.reasons,
+  }));
+
+  const pairingSuggestions = pairingByRoast[roastEstimation.primary] ?? [];
+
+  const recommendation: RecommendationResult = {
+    topMatches,
+    recommendedRoast: roastEstimation.primary,
+    recommendedGrind: "medium",
+    recommendedBrewingMethods: ["handDrip"],
+    pairingSuggestions,
+    avoidNotes: [],
+  };
+
+  return { recommendation, ranked, preference, roastEstimation, isColdStart: true };
+}
+
 // Re-exports for convenience
 export { analyzePreferences } from "./preferenceAnalyzer";
 export { estimateRoastLevel } from "./roastEstimator";
@@ -107,4 +254,6 @@ export { filterCandidates } from "./candidateFilter";
 export { selectBrewingMethods } from "./brewingSelector";
 export { rankCandidates } from "./finalRanker";
 export { generateReasons } from "./reasonGenerator";
-export type { AnalyzedPreference, RoastEstimation, RankedResult, BrewingSelection, BrewingParams } from "./types";
+export { selectSerendipityCandidate } from "./serendipity";
+export { getColdStartRecommendations, isColdStartInput } from "./coldStart";
+export type { AnalyzedPreference, RoastEstimation, RankedResult, BrewingSelection, BrewingParams, RecommendationStrategy, DislikeLevel, DislikeMap } from "./types";
