@@ -89,19 +89,19 @@ export function ResultPage() {
         <p className="text-4xl mb-2" aria-hidden="true">
           ☕
         </p>
-        <h1 className="text-2xl font-serif font-bold text-cafe-900 mb-1">
+        <h1 className="text-2xl font-serif font-bold text-cafe-900 dark:text-dark-text mb-1">
           診断結果
         </h1>
-        <p className="text-sm text-stone-500">
+        <p className="text-sm text-stone-500 dark:text-dark-text-muted">
           あなたにぴったりのコーヒーが見つかりました
         </p>
         {saved && (
-          <p className="mt-2 text-xs text-cafe-600 animate-pulse">
+          <p className="mt-2 text-xs text-cafe-600 dark:text-cafe-400 animate-pulse">
             履歴に保存しました
           </p>
         )}
         {state.fromHistory && (
-          <p className="mt-2 text-xs text-stone-400">
+          <p className="mt-2 text-xs text-stone-400 dark:text-dark-text-muted">
             保存済みの診断結果
           </p>
         )}
@@ -127,10 +127,10 @@ export function ResultPage() {
       {/* Flavor radar chart */}
       <section className="mb-8" aria-label="味覚プロファイル">
         <Card>
-          <h3 className="text-lg font-bold text-cafe-800 mb-2 text-center">
+          <h3 className="text-lg font-bold text-cafe-800 dark:text-cafe-200 mb-2 text-center">
             味覚プロファイル
           </h3>
-          <div className="flex items-center justify-center gap-4 mb-2 text-xs text-stone-500">
+          <div className="flex items-center justify-center gap-4 mb-2 text-xs text-stone-500 dark:text-dark-text-muted">
             <span className="flex items-center gap-1">
               <span className="inline-block w-3 h-3 rounded-sm bg-cafe-500/25 border border-cafe-600" />
               あなた
@@ -167,14 +167,14 @@ export function ResultPage() {
       {result.avoidNotes.length > 0 && (
         <section className="mb-8" aria-label="避けた方がよい傾向">
           <Card>
-            <h3 className="text-lg font-bold text-cafe-800 mb-3">
+            <h3 className="text-lg font-bold text-cafe-800 dark:text-cafe-200 mb-3">
               避けた方がよい傾向
             </h3>
             <div className="space-y-2">
               {result.avoidNotes.map((note, i) => (
                 <p
                   key={i}
-                  className="text-sm text-stone-600 flex items-start gap-2"
+                  className="text-sm text-stone-600 dark:text-dark-text-muted flex items-start gap-2"
                 >
                   <span className="text-amber-500 shrink-0">⚠</span>
                   {note}

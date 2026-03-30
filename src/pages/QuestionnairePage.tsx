@@ -135,14 +135,14 @@ export function QuestionnairePage() {
       {/* Progress */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm text-stone-500">
+          <span className="text-sm text-stone-500 dark:text-dark-text-muted">
             {mode === "beginner" ? "かんたん診断" : "くわしく診断"}
           </span>
-          <span className="text-sm font-medium text-cafe-700">
+          <span className="text-sm font-medium text-cafe-700 dark:text-cafe-300">
             {currentIndex + 1} / {totalQuestions}
           </span>
         </div>
-        <div className="w-full h-2 bg-cafe-100 rounded-full overflow-hidden">
+        <div className="w-full h-2 bg-cafe-100 dark:bg-dark-border rounded-full overflow-hidden">
           <div
             className="h-full bg-cafe-500 rounded-full transition-all duration-500 ease-out"
             style={{
@@ -159,7 +159,7 @@ export function QuestionnairePage() {
           animating ? "opacity-0 translate-y-3" : "opacity-100 translate-y-0"
         }`}
       >
-        <h2 className="text-lg font-bold text-cafe-800 mb-6 leading-relaxed">
+        <h2 className="text-lg font-bold text-cafe-800 dark:text-cafe-200 mb-6 leading-relaxed">
           {getQuestionText(question)}
         </h2>
 

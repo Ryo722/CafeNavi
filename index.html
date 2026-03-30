@@ -24,6 +24,13 @@
     <meta name="twitter:description" content="あなたにぴったりのコーヒーを見つけよう" />
   </head>
   <body>
+    <script>
+      (function() {
+        var theme = localStorage.getItem('cafenavi_theme') || 'system';
+        var isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        if (isDark) document.documentElement.classList.add('dark');
+      })();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script>

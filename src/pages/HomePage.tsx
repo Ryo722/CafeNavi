@@ -12,10 +12,10 @@ export function HomePage() {
         <p className="text-5xl mb-4" aria-hidden="true">
           ☕
         </p>
-        <h1 className="text-4xl font-serif font-bold text-cafe-900 mb-3">
+        <h1 className="text-4xl font-serif font-bold text-cafe-900 dark:text-dark-text mb-3">
           CafeNavi
         </h1>
-        <p className="text-lg text-stone-600 leading-relaxed">
+        <p className="text-lg text-stone-600 dark:text-dark-text-muted leading-relaxed">
           あなたにぴったりのコーヒーを見つけよう
         </p>
       </div>
@@ -23,7 +23,7 @@ export function HomePage() {
       {/* Mode selection */}
       <div className="space-y-4 mb-8">
         <Card
-          className="cursor-pointer hover:shadow-md transition-shadow border-cafe-200 hover:border-cafe-400"
+          className="cursor-pointer hover:shadow-md transition-shadow border-cafe-200 hover:border-cafe-400 dark:border-dark-border dark:hover:border-cafe-500"
           onClick={() =>
             navigate("/questionnaire", { state: { mode: "beginner" } })
           }
@@ -42,10 +42,10 @@ export function HomePage() {
               🌱
             </div>
             <div className="flex-1">
-              <h2 className="text-xl font-bold text-cafe-800 mb-1">
+              <h2 className="text-xl font-bold text-cafe-800 dark:text-cafe-200 mb-1">
                 かんたん診断
               </h2>
-              <p className="text-sm text-stone-600 mb-3">
+              <p className="text-sm text-stone-600 dark:text-dark-text-muted mb-3">
                 コーヒー初心者におすすめ。10問の質問であなたの好みを分析します。
               </p>
               <Button size="sm" className="w-full">
@@ -56,7 +56,7 @@ export function HomePage() {
         </Card>
 
         <Card
-          className="cursor-pointer hover:shadow-md transition-shadow border-cafe-200 hover:border-cafe-400"
+          className="cursor-pointer hover:shadow-md transition-shadow border-cafe-200 hover:border-cafe-400 dark:border-dark-border dark:hover:border-cafe-500"
           onClick={() =>
             navigate("/questionnaire", { state: { mode: "advanced" } })
           }
@@ -75,10 +75,10 @@ export function HomePage() {
               🔍
             </div>
             <div className="flex-1">
-              <h2 className="text-xl font-bold text-cafe-800 mb-1">
+              <h2 className="text-xl font-bold text-cafe-800 dark:text-cafe-200 mb-1">
                 くわしく診断
               </h2>
-              <p className="text-sm text-stone-600 mb-3">
+              <p className="text-sm text-stone-600 dark:text-dark-text-muted mb-3">
                 こだわり派に。20問の詳細な質問でより精密な診断結果をお届けします。
               </p>
               <Button size="sm" variant="secondary" className="w-full">
@@ -127,7 +127,7 @@ export function HomePage() {
       <div className="text-center">
         <Link
           to="/guide"
-          className="inline-flex items-center gap-2 text-cafe-600 hover:text-cafe-800 font-medium transition-colors"
+          className="inline-flex items-center gap-2 text-cafe-600 hover:text-cafe-800 dark:text-cafe-400 dark:hover:text-cafe-300 font-medium transition-colors"
         >
           <span aria-hidden="true">📖</span>
           コーヒーガイドを見る

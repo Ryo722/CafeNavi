@@ -37,8 +37,8 @@ export function SceneSelector({
               border-2
               ${
                 isSelected
-                  ? "border-cafe-500 bg-cafe-50 text-cafe-800 shadow-sm"
-                  : "border-cafe-100 bg-white text-stone-600 hover:border-cafe-300 hover:bg-cafe-50"
+                  ? "border-cafe-500 bg-cafe-50 text-cafe-800 shadow-sm dark:border-cafe-400 dark:bg-dark-border dark:text-cafe-200"
+                  : "border-cafe-100 bg-white text-stone-600 hover:border-cafe-300 hover:bg-cafe-50 dark:border-dark-border dark:bg-dark-card dark:text-dark-text-muted dark:hover:border-cafe-500 dark:hover:bg-dark-border"
               }
             `}
             aria-pressed={isSelected}
