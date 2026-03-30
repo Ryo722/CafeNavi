@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import type { CoffeeProfile } from "../../types/coffee";
 import { Card } from "../ui/Card";
 import { useTranslation } from "../../lib/i18n";
@@ -10,7 +10,7 @@ type CoffeeCardProps = {
   rank: number;
 };
 
-export function CoffeeCard({ coffee, score, reasons, rank }: CoffeeCardProps) {
+export const CoffeeCard = memo(function CoffeeCard({ coffee, score, reasons, rank }: CoffeeCardProps) {
   const isFirst = rank === 1;
   const { t } = useTranslation();
   const [barWidth, setBarWidth] = useState(0);
@@ -21,6 +21,7 @@ export function CoffeeCard({ coffee, score, reasons, rank }: CoffeeCardProps) {
   }, [score]);
 
   return (
+    <article aria-label={`${t(`coffee.${coffee.id}.name`)} - ${score}%`}>
     <Card
       padding={isFirst ? "lg" : "md"}
       className={isFirst ? "border-cafe-400 border-2 shadow-md" : ""}
@@ -90,5 +91,6 @@ export function CoffeeCard({ coffee, score, reasons, rank }: CoffeeCardProps) {
         </div>
       )}
     </Card>
+    </article>
   );
-}
+});

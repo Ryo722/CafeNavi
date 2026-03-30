@@ -1,3 +1,5 @@
+import { memo } from "react";
+import { useTranslation } from "../../lib/i18n";
 import type { FlavorScores } from "../../types/coffee";
 
 type TrendDataPoint = {
@@ -21,12 +23,14 @@ type TrendChartProps = {
 const DEFAULT_HEIGHT = 200;
 const PADDING = { top: 20, right: 16, bottom: 40, left: 32 };
 
-export function TrendChart({
+export const TrendChart = memo(function TrendChart({
   data,
   lines,
   height = DEFAULT_HEIGHT,
   formatDate,
 }: TrendChartProps) {
+  const { t } = useTranslation();
+
   if (data.length === 0) return null;
 
   const width = 100; // viewBox percentage-based
@@ -70,7 +74,7 @@ export function TrendChart({
         className="w-full"
         preserveAspectRatio="xMidYMid meet"
         role="img"
-        aria-label="Flavor trend chart"
+        aria-label={t("stats.flavorTrend")}
       >
         {/* Grid lines */}
         {yLevels.map((level) => (
@@ -154,4 +158,4 @@ export function TrendChart({
       </div>
     </div>
   );
-}
+});

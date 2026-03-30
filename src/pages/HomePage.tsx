@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
@@ -41,13 +42,17 @@ export function HomePage() {
   const navigate = useNavigate();
   const { t, locale } = useTranslation();
 
-  const seasonal = getSeasonalRecommendation();
+  const seasonal = useMemo(() => getSeasonalRecommendation(), []);
   const style = seasonStyles[seasonal.season];
 
-  const recommendedCoffees = seasonal.recommendedCoffeeIds
-    .map((id) => coffeeProfiles.find((c) => c.id === id))
-    .filter(Boolean)
-    .slice(0, 3);
+  const recommendedCoffees = useMemo(
+    () =>
+      seasonal.recommendedCoffeeIds
+        .map((id) => coffeeProfiles.find((c) => c.id === id))
+        .filter(Boolean)
+        .slice(0, 3),
+    [seasonal.recommendedCoffeeIds],
+  );
 
   const seasonName = locale === "ja" ? seasonal.nameJa : seasonal.nameEn;
   const mood = locale === "ja" ? seasonal.mood : seasonal.moodEn;

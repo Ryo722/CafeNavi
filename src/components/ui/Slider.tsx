@@ -8,6 +8,7 @@ type SliderProps = {
   rightLabel?: string;
   showValue?: boolean;
   id?: string;
+  "aria-label"?: string;
 };
 
 export function Slider({
@@ -20,6 +21,7 @@ export function Slider({
   rightLabel,
   showValue = true,
   id,
+  "aria-label": ariaLabel,
 }: SliderProps) {
   return (
     <div className="w-full">
@@ -32,10 +34,11 @@ export function Slider({
           step={step}
           value={value}
           onChange={(e) => onChange(Number(e.target.value))}
-          className="flex-1 h-2 cursor-pointer"
+          className="flex-1 h-2 cursor-pointer focus-visible:ring-2 focus-visible:ring-cafe-400 focus-visible:ring-offset-2 focus-visible:outline-none rounded-full"
           aria-valuemin={min}
           aria-valuemax={max}
           aria-valuenow={value}
+          aria-label={ariaLabel}
         />
         {showValue && (
           <span className="text-cafe-700 font-bold text-lg min-w-[2ch] text-center">

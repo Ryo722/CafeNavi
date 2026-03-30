@@ -145,7 +145,7 @@ export function StatsPage() {
         </div>
 
         {/* サマリーカード */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+        <section aria-label={t("stats.title")} className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
           <Card padding="sm" className="text-center">
             <p className="text-xs text-stone-400 mb-1">
               {t("stats.totalDiagnoses")}
@@ -178,7 +178,7 @@ export function StatsPage() {
             </p>
             <p className="text-sm font-bold text-cafe-800">{topRoast}</p>
           </Card>
-        </div>
+        </section>
 
         {/* 平均味覚プロファイル */}
         <Card className="mb-6">

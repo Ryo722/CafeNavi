@@ -152,6 +152,7 @@ function BrewingGuideCard({
       <button
         className="text-sm text-cafe-600 hover:text-cafe-800 font-medium mb-2 cursor-pointer flex items-center gap-1 transition-colors"
         onClick={() => setShowSteps(!showSteps)}
+        aria-expanded={showSteps}
       >
         <svg
           className={`w-4 h-4 transition-transform duration-200 ${showSteps ? "rotate-90" : ""}`}

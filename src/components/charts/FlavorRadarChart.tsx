@@ -1,3 +1,4 @@
+import { memo } from "react";
 import type { FlavorScores } from "../../types/coffee";
 import { useTranslation } from "../../lib/i18n";
 
@@ -48,7 +49,7 @@ function getPolygonPoints(
     .join(" ");
 }
 
-export function FlavorRadarChart({
+export const FlavorRadarChart = memo(function FlavorRadarChart({
   userProfile,
   coffeeProfile,
   size = 280,
@@ -164,4 +165,4 @@ export function FlavorRadarChart({
       })}
     </svg>
   );
-}
+});

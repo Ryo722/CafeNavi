@@ -1,3 +1,4 @@
+import { memo } from "react";
 import type { FlavorScores } from "../../types/coffee";
 import { useTranslation } from "../../lib/i18n";
 
@@ -52,7 +53,7 @@ function getPolygonPoints(
     .join(" ");
 }
 
-export function CompareRadarChart({
+export const CompareRadarChart = memo(function CompareRadarChart({
   profile1,
   profile2,
   label1,
@@ -191,4 +192,4 @@ export function CompareRadarChart({
       </div>
     </div>
   );
-}
+});
