@@ -548,6 +548,19 @@ export const ja: Translations = {
   "nav.compare": "比較",
   "history.compare": "比較する",
 
+  // brewing guide
+  "brewingGuide.title": "淹れ方ガイド",
+  "brewingGuide.subtitle": "焙煎度に合った美味しい淹れ方をマスターしよう",
+  "brewingGuide.temperature": "温度",
+  "brewingGuide.ratio": "豆と湯の比率",
+  "brewingGuide.totalTime": "合計時間",
+  "brewingGuide.steps": "手順",
+  "brewingGuide.tips": "コツ",
+  "brewingGuide.watchVideo": "YouTubeで動画を見る",
+  "brewingGuide.filterAll": "すべて",
+  "brewingGuide.noGuides": "この焙煎度のガイドはまだありません",
+  "result.viewBrewingGuide": "この焙煎度の淹れ方を見る",
+
   // date format
   "date.format": "{{y}}年{{m}}月{{d}}日 {{h}}:{{min}}",
 };

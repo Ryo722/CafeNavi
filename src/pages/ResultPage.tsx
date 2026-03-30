@@ -179,6 +179,13 @@ export function ResultPage() {
           {t("result.retryDiagnosis")}
         </Button>
         <Button
+          variant="secondary"
+          onClick={() => navigate(`/guide#brewing-${result.recommendedRoast}`)}
+          className="w-full"
+        >
+          {t("result.viewBrewingGuide")}
+        </Button>
+        <Button
           variant="ghost"
           onClick={() => navigate("/guide")}
           className="w-full"

@@ -547,6 +547,19 @@ export const en: Translations = {
   "nav.compare": "Compare",
   "history.compare": "Compare",
 
+  // brewing guide
+  "brewingGuide.title": "Brewing Guide",
+  "brewingGuide.subtitle": "Master the perfect brew for each roast level",
+  "brewingGuide.temperature": "Temperature",
+  "brewingGuide.ratio": "Coffee to Water Ratio",
+  "brewingGuide.totalTime": "Total Time",
+  "brewingGuide.steps": "Steps",
+  "brewingGuide.tips": "Tips",
+  "brewingGuide.watchVideo": "Watch on YouTube",
+  "brewingGuide.filterAll": "All",
+  "brewingGuide.noGuides": "No guides available for this roast level yet",
+  "result.viewBrewingGuide": "See brewing guide for this roast",
+
   // date format
   "date.format": "{{m}}/{{d}}/{{y}} {{h}}:{{min}}",
 };
