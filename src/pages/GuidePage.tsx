@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { coffeeProfiles } from "../data/coffeeProfiles";
 import { roastCharacteristics } from "../data/roastProfiles";
 import type { RoastLevel, GrindSize, BrewingMethod } from "../types/coffee";
 import { Card } from "../components/ui/Card";
+import { PageTransition } from "../components/ui/PageTransition";
 import { useTranslation } from "../lib/i18n";
 
-// Accordion component
+// Accordion component with smooth open/close
 function Accordion({
   title,
   children,
@@ -16,6 +17,18 @@ function Accordion({
   defaultOpen?: boolean;
 }) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [maxHeight, setMaxHeight] = useState<string>(defaultOpen ? "none" : "0px");
+
+  const updateHeight = useCallback(() => {
+    if (contentRef.current) {
+      setMaxHeight(isOpen ? `${contentRef.current.scrollHeight}px` : "0px");
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    updateHeight();
+  }, [updateHeight]);
 
   return (
     <div className="border border-cafe-100 rounded-xl overflow-hidden bg-white">
@@ -41,9 +54,13 @@ function Accordion({
           />
         </svg>
       </button>
-      {isOpen && (
+      <div
+        ref={contentRef}
+        className={`accordion-content ${isOpen ? "accordion-content-open" : "accordion-content-closed"}`}
+        style={{ maxHeight: isOpen ? maxHeight : "0px" }}
+      >
         <div className="px-4 pb-4 border-t border-cafe-50">{children}</div>
-      )}
+      </div>
     </div>
   );
 }
@@ -88,6 +105,7 @@ export function GuidePage() {
   const { t } = useTranslation();
 
   return (
+    <PageTransition>
     <div className="max-w-lg mx-auto px-4 py-8">
       <div className="text-center mb-8">
         <h1 className="text-2xl font-serif font-bold text-cafe-900 mb-1">
@@ -204,5 +222,6 @@ export function GuidePage() {
         </Accordion>
       </div>
     </div>
+    </PageTransition>
   );
 }

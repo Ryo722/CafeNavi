@@ -38,6 +38,7 @@ export function Button({
         focus:outline-none focus:ring-2 focus:ring-cafe-400 focus:ring-offset-2
         disabled:opacity-50 disabled:cursor-not-allowed
         cursor-pointer
+        hover:scale-[1.02] active:scale-[0.98]
         ${variantClasses[variant]}
         ${sizeClasses[size]}
         ${className}

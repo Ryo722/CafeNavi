@@ -1,6 +1,7 @@
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
+import { PageTransition } from "../components/ui/PageTransition";
 import { useTranslation } from "../lib/i18n";
 
 export function HomePage() {
@@ -8,6 +9,7 @@ export function HomePage() {
   const { t } = useTranslation();
 
   return (
+    <PageTransition>
     <div className="max-w-lg mx-auto px-4 py-10">
       {/* Hero */}
       <div className="text-center mb-10">
@@ -102,5 +104,6 @@ export function HomePage() {
         </Link>
       </div>
     </div>
+    </PageTransition>
   );
 }

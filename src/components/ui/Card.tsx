@@ -21,6 +21,8 @@ export function Card({
     <div
       className={`
         bg-white rounded-2xl shadow-sm border border-cafe-100
+        transition-all duration-200
+        hover:shadow-md hover:-translate-y-0.5
         ${paddingClasses[padding]}
         ${className}
       `}

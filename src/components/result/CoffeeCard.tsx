@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import type { CoffeeProfile } from "../../types/coffee";
 import { Card } from "../ui/Card";
 import { useTranslation } from "../../lib/i18n";
@@ -12,6 +13,12 @@ type CoffeeCardProps = {
 export function CoffeeCard({ coffee, score, reasons, rank }: CoffeeCardProps) {
   const isFirst = rank === 1;
   const { t } = useTranslation();
+  const [barWidth, setBarWidth] = useState(0);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setBarWidth(score), 100);
+    return () => clearTimeout(timer);
+  }, [score]);
 
   return (
     <Card
@@ -45,6 +52,14 @@ export function CoffeeCard({ coffee, score, reasons, rank }: CoffeeCardProps) {
           </span>
           <p className="text-xs text-stone-400">{t("result.matchScore")}</p>
         </div>
+      </div>
+
+      {/* Score bar */}
+      <div className="w-full h-1.5 bg-cafe-100 rounded-full overflow-hidden mb-3">
+        <div
+          className="h-full bg-cafe-500 rounded-full score-bar"
+          style={{ width: `${barWidth}%` }}
+        />
       </div>
 
       <p className="text-sm text-stone-600 mb-3 leading-relaxed">

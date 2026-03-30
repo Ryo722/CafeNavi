@@ -10,6 +10,8 @@ import { BrewingRecommendation } from "../components/result/BrewingRecommendatio
 import { PairingList } from "../components/result/PairingList";
 import { FlavorRadarChart } from "../components/charts/FlavorRadarChart";
 import { Card } from "../components/ui/Card";
+import { PageTransition } from "../components/ui/PageTransition";
+import { AnimatedList } from "../components/ui/AnimatedList";
 import { saveDiagnosis } from "../lib/storage";
 import type { DiagnosisRecord } from "../lib/storage";
 import { useTranslation } from "../lib/i18n";
@@ -64,6 +66,7 @@ export function ResultPage() {
     : undefined;
 
   return (
+    <PageTransition>
     <div className="max-w-lg mx-auto px-4 py-8">
       <div className="text-center mb-8">
         <p className="text-4xl mb-2" aria-hidden="true">
@@ -89,19 +92,21 @@ export function ResultPage() {
 
       {/* Top matches */}
       <section className="space-y-4 mb-8" aria-label={t("result.sectionRecommended")}>
-        {result.topMatches.map((match, i) => {
-          const coffee = coffeeProfiles.find((p) => p.id === match.coffeeId);
-          if (!coffee) return null;
-          return (
-            <CoffeeCard
-              key={match.coffeeId}
-              coffee={coffee}
-              score={match.score}
-              reasons={match.reasons}
-              rank={i + 1}
-            />
-          );
-        })}
+        <AnimatedList staggerDelay={150}>
+          {result.topMatches.map((match, i) => {
+            const coffee = coffeeProfiles.find((p) => p.id === match.coffeeId);
+            if (!coffee) return null;
+            return (
+              <CoffeeCard
+                key={match.coffeeId}
+                coffee={coffee}
+                score={match.score}
+                reasons={match.reasons}
+                rank={i + 1}
+              />
+            );
+          })}
+        </AnimatedList>
       </section>
 
       {/* Flavor radar chart */}
@@ -189,5 +194,6 @@ export function ResultPage() {
         </Button>
       </div>
     </div>
+    </PageTransition>
   );
 }

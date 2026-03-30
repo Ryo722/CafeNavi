@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import type { UserMode, TasteProfileInput, Question } from "../types/questionnaire";
 import {
@@ -9,6 +9,7 @@ import { getFullRecommendation } from "../lib/explanation";
 import { calculateUserFlavorProfile } from "../lib/scoring";
 import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
+import { PageTransition } from "../components/ui/PageTransition";
 import { TasteSlider } from "../components/taste/TasteSlider";
 import { DessertSelector } from "../components/taste/DessertSelector";
 import { SceneSelector } from "../components/taste/SceneSelector";
@@ -44,19 +45,34 @@ export function QuestionnairePage() {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [input, setInput] = useState<TasteProfileInput>({ ...defaultInput });
-  const [animating, setAnimating] = useState(false);
+  const [animState, setAnimState] = useState<"enter-right" | "enter-left" | "exit-left" | "exit-right" | "idle">("enter-right");
+  const pendingIndexRef = useRef<number | null>(null);
 
   const question = questions[currentIndex];
   const totalQuestions = questions.length;
   const isLast = currentIndex === totalQuestions - 1;
   const isBeginner = mode === "beginner";
 
-  // Page entrance animation
+  // Trigger enter animation when index changes
   useEffect(() => {
-    setAnimating(true);
-    const timer = setTimeout(() => setAnimating(false), 10);
-    return () => clearTimeout(timer);
-  }, [currentIndex]);
+    // Reset to idle after enter animation completes
+    if (animState === "enter-right" || animState === "enter-left") {
+      const timer = setTimeout(() => setAnimState("idle"), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [animState]);
+
+  const animateToIndex = useCallback((nextIndex: number, direction: "forward" | "backward") => {
+    const exitClass = direction === "forward" ? "exit-left" : "exit-right";
+    const enterClass = direction === "forward" ? "enter-right" : "enter-left";
+    pendingIndexRef.current = nextIndex;
+    setAnimState(exitClass);
+    setTimeout(() => {
+      setCurrentIndex(nextIndex);
+      setAnimState(enterClass);
+      pendingIndexRef.current = null;
+    }, 250);
+  }, []);
 
   const handleSliderChange = (field: keyof TasteProfileInput, value: number) => {
     setInput((prev) => ({ ...prev, [field]: value }));
@@ -86,13 +102,13 @@ export function QuestionnairePage() {
       const userProfile = calculateUserFlavorProfile(input);
       navigate("/result", { state: { result, userProfile, input, mode } });
     } else {
-      setCurrentIndex((i) => i + 1);
+      animateToIndex(currentIndex + 1, "forward");
     }
   };
 
   const goPrev = () => {
     if (currentIndex > 0) {
-      setCurrentIndex((i) => i - 1);
+      animateToIndex(currentIndex - 1, "backward");
     }
   };
 
@@ -128,7 +144,14 @@ export function QuestionnairePage() {
     return t(`slider.${question.field}.right`);
   };
 
+  const questionAnimClass =
+    animState === "enter-right" ? "question-enter-right" :
+    animState === "enter-left" ? "question-enter-left" :
+    animState === "exit-left" ? "question-exit-left" :
+    animState === "exit-right" ? "question-exit-right" : "";
+
   return (
+    <PageTransition>
     <div className="max-w-lg mx-auto px-4 py-8">
       {/* Progress */}
       <div className="mb-6">
@@ -144,9 +167,10 @@ export function QuestionnairePage() {
         </div>
         <div className="w-full h-2 bg-cafe-100 rounded-full overflow-hidden">
           <div
-            className="h-full bg-cafe-500 rounded-full transition-all duration-500 ease-out"
+            className="h-full bg-cafe-500 rounded-full"
             style={{
               width: `${((currentIndex + 1) / totalQuestions) * 100}%`,
+              transition: "width 0.3s ease",
             }}
           />
         </div>
@@ -155,9 +179,7 @@ export function QuestionnairePage() {
       {/* Question card */}
       <Card
         padding="lg"
-        className={`mb-6 transition-all duration-300 ${
-          animating ? "opacity-0 translate-y-3" : "opacity-100 translate-y-0"
-        }`}
+        className={`mb-6 ${questionAnimClass}`}
       >
         <h2 className="text-lg font-bold text-cafe-800 mb-6 leading-relaxed">
           {getQuestionText(question)}
@@ -215,5 +237,6 @@ export function QuestionnairePage() {
         </Button>
       </div>
     </div>
+    </PageTransition>
   );
 }

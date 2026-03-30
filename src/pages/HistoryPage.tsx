@@ -9,6 +9,7 @@ import type { DiagnosisRecord } from "../lib/storage";
 import { coffeeProfiles } from "../data/coffeeProfiles";
 import { Card } from "../components/ui/Card";
 import { Button } from "../components/ui/Button";
+import { PageTransition } from "../components/ui/PageTransition";
 import { useTranslation } from "../lib/i18n";
 
 export function HistoryPage() {
@@ -61,6 +62,7 @@ export function HistoryPage() {
   );
 
   return (
+    <PageTransition>
     <div className="max-w-lg mx-auto px-4 py-8">
       <div className="text-center mb-8">
         <p className="text-4xl mb-2" aria-hidden="true">
@@ -167,5 +169,6 @@ export function HistoryPage() {
         </Button>
       </div>
     </div>
+    </PageTransition>
   );
 }
