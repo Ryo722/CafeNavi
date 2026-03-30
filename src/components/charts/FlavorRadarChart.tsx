@@ -112,6 +112,7 @@ export function FlavorRadarChart({
           stroke="#b4783c"
           strokeWidth={1.5}
           strokeDasharray="4 2"
+          className="radar-polygon-coffee"
         />
       )}
 
@@ -121,6 +122,7 @@ export function FlavorRadarChart({
         fill="rgba(212, 137, 42, 0.25)"
         stroke="#b8691e"
         strokeWidth={2}
+        className="radar-polygon-user"
       />
 
       {/* Data points */}
