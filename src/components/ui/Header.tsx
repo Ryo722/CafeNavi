@@ -16,6 +16,7 @@ export function Header() {
     { to: "/questionnaire", label: t("nav.questionnaire") },
     { to: "/guide", label: t("nav.guide") },
     { to: "/history", label: t("nav.history") },
+    { to: "/stats", label: t("nav.stats") },
     ...(hasEnoughHistory
       ? [{ to: "/compare", label: t("nav.compare") }]
       : []),
