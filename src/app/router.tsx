@@ -4,6 +4,7 @@ import { QuestionnairePage } from "../pages/QuestionnairePage";
 import { ResultPage } from "../pages/ResultPage";
 import { GuidePage } from "../pages/GuidePage";
 import { HistoryPage } from "../pages/HistoryPage";
+import { ComparePage } from "../pages/ComparePage";
 import { AppLayout } from "./AppLayout";
 
 export const router = createHashRouter([
@@ -15,6 +16,7 @@ export const router = createHashRouter([
       { path: "/result", element: <ResultPage /> },
       { path: "/guide", element: <GuidePage /> },
       { path: "/history", element: <HistoryPage /> },
+      { path: "/compare", element: <ComparePage /> },
     ],
   },
 ]);

@@ -446,6 +446,30 @@ export const en: Translations = {
   "avoid.strongRoast":
     "Heavily roasted dark coffees are best avoided",
 
+  // compare
+  "compare.title": "Compare Results",
+  "compare.selectTwo": "Select 2 diagnosis results",
+  "compare.compare": "Compare",
+  "compare.reselect": "Reselect",
+  "compare.diagnosis1": "Diagnosis 1",
+  "compare.diagnosis2": "Diagnosis 2",
+  "compare.noHistory": "Need at least 2 diagnoses to compare",
+  "compare.differences": "Differences",
+  "compare.same": "Same",
+  "compare.date": "Date",
+  "compare.mode": "Mode",
+  "compare.topCoffee": "Top Recommendation",
+  "compare.matchScore": "Match Score",
+  "compare.flavorProfile": "Flavor Profile",
+  "compare.roastLevel": "Recommended Roast",
+  "compare.grindSize": "Recommended Grind",
+  "compare.brewingMethod": "Brewing Method",
+  "compare.pairings": "Pairings",
+  "compare.selected": "{{count}} selected",
+  "compare.backHome": "Back to Home",
+  "nav.compare": "Compare",
+  "history.compare": "Compare",
+
   // date format
   "date.format": "{{m}}/{{d}}/{{y}} {{h}}:{{min}}",
 };
