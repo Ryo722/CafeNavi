@@ -77,3 +77,15 @@ export type RecommendationResult = {
   pairingSuggestions: string[];
   avoidNotes: string[];
 };
+
+export type FeedbackRating = "perfect" | "good" | "neutral" | "off" | "wrong";
+
+export type DiagnosisFeedback = {
+  diagnosisId: string;
+  rating: FeedbackRating;
+  coffeeRatings?: Record<string, FeedbackRating>;
+  comment?: string;
+  createdAt: string;
+};
+
+export type WeightAdjustments = Record<keyof FlavorScores, number>;
