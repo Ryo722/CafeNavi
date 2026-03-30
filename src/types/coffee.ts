@@ -9,6 +9,8 @@ export type FlavorScores = {
   chocolaty: number;
   roastiness: number;
   cleanness: number;
+  aftertaste: number;  // 余韻の長さ・質
+  balance: number;     // 全体のバランス
 };
 
 export type RoastLevel =
@@ -45,6 +47,12 @@ export type CoffeeProfile = {
   pairings: string[];
   notes: string[];
   description: string;
+  confidence: number;          // データ信頼度 0-1 (heuristic=0.6, expert=0.9等)
+  altitude?: string;           // 標高
+  variety?: string[];          // 品種
+  brewingCompatibility: Record<BrewingMethod, number>;  // 抽出相性スコア 1-10
+  milkCompatibility: number;   // ミルク相性 1-10
+  seasonalAffinity?: string[]; // 季節相性
 };
 
 export type RecommendationResult = {

@@ -10,18 +10,22 @@ export const roastCharacteristics: Record<RoastLevel, FlavorModifier> = {
     cleanness: 2,
     bitterness: -1,
     body: -1,
+    aftertaste: 1,
   },
   "medium-light": {
     acidity: 2,
     fruitiness: 1,
     sweetness: 2,
     cleanness: 1,
+    balance: 1,
   },
   medium: {
     sweetness: 2,
     nuttiness: 1,
     chocolaty: 1,
     body: 1,
+    balance: 2,
+    aftertaste: 1,
   },
   "medium-dark": {
     bitterness: 1,
@@ -29,6 +33,7 @@ export const roastCharacteristics: Record<RoastLevel, FlavorModifier> = {
     chocolaty: 2,
     roastiness: 1,
     acidity: -1,
+    aftertaste: 1,
   },
   dark: {
     bitterness: 3,
@@ -37,5 +42,6 @@ export const roastCharacteristics: Record<RoastLevel, FlavorModifier> = {
     acidity: -2,
     fruitiness: -1,
     floral: -1,
+    aftertaste: 1,
   },
 };
