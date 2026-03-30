@@ -20,7 +20,7 @@ export function Card({
   return (
     <div
       className={`
-        bg-white rounded-2xl shadow-sm border border-cafe-100
+        bg-white dark:bg-dark-card rounded-2xl shadow-sm border border-cafe-100 dark:border-dark-border
         ${paddingClasses[padding]}
         ${className}
       `}

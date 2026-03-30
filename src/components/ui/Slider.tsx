@@ -38,15 +38,15 @@ export function Slider({
           aria-valuenow={value}
         />
         {showValue && (
-          <span className="text-cafe-700 font-bold text-lg min-w-[2ch] text-center">
+          <span className="text-cafe-700 dark:text-cafe-300 font-bold text-lg min-w-[2ch] text-center">
             {value}
           </span>
         )}
       </div>
       {(leftLabel || rightLabel) && (
         <div className="flex justify-between mt-1">
-          <span className="text-xs text-stone-500">{leftLabel}</span>
-          <span className="text-xs text-stone-500">{rightLabel}</span>
+          <span className="text-xs text-stone-500 dark:text-dark-text-muted">{leftLabel}</span>
+          <span className="text-xs text-stone-500 dark:text-dark-text-muted">{rightLabel}</span>
         </div>
       )}
     </div>

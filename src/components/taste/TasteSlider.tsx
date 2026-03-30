@@ -20,7 +20,7 @@ export function TasteSlider({
   return (
     <div className="space-y-3">
       {description && (
-        <p className="text-sm text-stone-500 leading-relaxed">{description}</p>
+        <p className="text-sm text-stone-500 dark:text-dark-text-muted leading-relaxed">{description}</p>
       )}
       <Slider
         id={questionId}

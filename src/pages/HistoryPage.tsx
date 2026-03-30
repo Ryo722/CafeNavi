@@ -64,18 +64,18 @@ export function HistoryPage() {
         <p className="text-4xl mb-2" aria-hidden="true">
           📋
         </p>
-        <h1 className="text-2xl font-serif font-bold text-cafe-900 mb-1">
+        <h1 className="text-2xl font-serif font-bold text-cafe-900 dark:text-dark-text mb-1">
           診断履歴
         </h1>
-        <p className="text-sm text-stone-500">
+        <p className="text-sm text-stone-500 dark:text-dark-text-muted">
           過去の診断結果を確認できます
         </p>
       </div>
 
       {history.length === 0 ? (
         <Card className="text-center py-12">
-          <p className="text-stone-400 text-lg mb-2">まだ診断履歴がありません</p>
-          <p className="text-stone-400 text-sm mb-6">
+          <p className="text-stone-400 dark:text-dark-text-muted text-lg mb-2">まだ診断履歴がありません</p>
+          <p className="text-stone-400 dark:text-dark-text-muted text-sm mb-6">
             コーヒー診断を受けると、結果がここに保存されます
           </p>
           <Button onClick={() => navigate("/questionnaire")} size="sm">
@@ -100,19 +100,19 @@ export function HistoryPage() {
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0 flex-1">
-                        <p className="text-xs text-stone-400 mb-1">
+                        <p className="text-xs text-stone-400 dark:text-dark-text-muted mb-1">
                           {formatDate(record.date)}
-                          <span className="ml-2 inline-block bg-cafe-100 text-cafe-700 px-2 py-0.5 rounded-full text-xs">
+                          <span className="ml-2 inline-block bg-cafe-100 dark:bg-dark-border text-cafe-700 dark:text-cafe-300 px-2 py-0.5 rounded-full text-xs">
                             {modeLabel(record.mode)}
                           </span>
                         </p>
                         {topCoffee && (
-                          <p className="text-base font-bold text-cafe-800 truncate">
+                          <p className="text-base font-bold text-cafe-800 dark:text-cafe-200 truncate">
                             {topCoffee.nameJa}
                           </p>
                         )}
                         {topMatch && (
-                          <p className="text-sm text-stone-500">
+                          <p className="text-sm text-stone-500 dark:text-dark-text-muted">
                             マッチ度: {Math.round(topMatch.score * 100)}%
                           </p>
                         )}
@@ -122,10 +122,10 @@ export function HistoryPage() {
                       </span>
                     </div>
                   </button>
-                  <div className="mt-2 pt-2 border-t border-cafe-50 flex justify-end">
+                  <div className="mt-2 pt-2 border-t border-cafe-50 dark:border-dark-border flex justify-end">
                     <button
                       type="button"
-                      className="text-xs text-stone-400 hover:text-red-500 transition-colors cursor-pointer"
+                      className="text-xs text-stone-400 dark:text-dark-text-muted hover:text-red-500 dark:hover:text-red-400 transition-colors cursor-pointer"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleDelete(record.id);

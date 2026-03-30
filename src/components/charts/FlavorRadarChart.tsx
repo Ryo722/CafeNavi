@@ -55,6 +55,12 @@ export function FlavorRadarChart({
   const cy = size / 2;
   const maxRadius = size / 2 - 40;
   const levels = [0.2, 0.4, 0.6, 0.8, 1.0];
+  const isDark = document.documentElement.classList.contains("dark");
+  const gridColor = isDark ? "#5a3f35" : "#e7ddd0";
+  const axisColor = isDark ? "#6b4f43" : "#d4c9bb";
+  const labelClass = isDark
+    ? "text-[10px] fill-[#c4a882] font-medium"
+    : "text-[10px] fill-stone-600 font-medium";
 
   return (
     <svg
@@ -80,7 +86,7 @@ export function FlavorRadarChart({
             })
             .join(" ")}
           fill="none"
-          stroke="#e7ddd0"
+          stroke={gridColor}
           strokeWidth={1}
         />
       ))}
@@ -95,7 +101,7 @@ export function FlavorRadarChart({
             y1={cy}
             x2={x}
             y2={y}
-            stroke="#d4c9bb"
+            stroke={axisColor}
             strokeWidth={1}
           />
         );
@@ -151,7 +157,7 @@ export function FlavorRadarChart({
             y={y}
             textAnchor="middle"
             dominantBaseline="central"
-            className="text-[10px] fill-stone-600 font-medium"
+            className={labelClass}
           >
             {axis.label}
           </text>

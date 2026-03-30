@@ -17,9 +17,9 @@ function Accordion({
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
-    <div className="border border-cafe-100 rounded-xl overflow-hidden bg-white">
+    <div className="border border-cafe-100 dark:border-dark-border rounded-xl overflow-hidden bg-white dark:bg-dark-card">
       <button
-        className="w-full flex items-center justify-between p-4 text-left font-bold text-cafe-800 hover:bg-cafe-50 transition-colors cursor-pointer"
+        className="w-full flex items-center justify-between p-4 text-left font-bold text-cafe-800 dark:text-cafe-200 hover:bg-cafe-50 dark:hover:bg-dark-border transition-colors cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
       >
@@ -41,7 +41,7 @@ function Accordion({
         </svg>
       </button>
       {isOpen && (
-        <div className="px-4 pb-4 border-t border-cafe-50">{children}</div>
+        <div className="px-4 pb-4 border-t border-cafe-50 dark:border-dark-border">{children}</div>
       )}
     </div>
   );
@@ -122,10 +122,10 @@ export function GuidePage() {
   return (
     <div className="max-w-lg mx-auto px-4 py-8">
       <div className="text-center mb-8">
-        <h1 className="text-2xl font-serif font-bold text-cafe-900 mb-1">
+        <h1 className="text-2xl font-serif font-bold text-cafe-900 dark:text-dark-text mb-1">
           コーヒーガイド
         </h1>
-        <p className="text-sm text-stone-500">
+        <p className="text-sm text-stone-500 dark:text-dark-text-muted">
           コーヒーをもっと楽しむための基礎知識
         </p>
       </div>
@@ -136,20 +136,20 @@ export function GuidePage() {
           <div className="space-y-4 mt-4">
             {coffeeProfiles.map((coffee) => (
               <Card key={coffee.id} padding="sm">
-                <h4 className="font-bold text-cafe-800 mb-1">
+                <h4 className="font-bold text-cafe-800 dark:text-cafe-200 mb-1">
                   {coffee.nameJa}
                 </h4>
-                <p className="text-xs text-stone-400 mb-2">
+                <p className="text-xs text-stone-400 dark:text-dark-text-muted mb-2">
                   {coffee.origins.join(", ")}
                 </p>
-                <p className="text-sm text-stone-600 leading-relaxed mb-2">
+                <p className="text-sm text-stone-600 dark:text-dark-text-muted leading-relaxed mb-2">
                   {coffee.description}
                 </p>
                 <div className="flex flex-wrap gap-1">
                   {coffee.notes.map((note) => (
                     <span
                       key={note}
-                      className="text-xs bg-cafe-50 text-cafe-600 px-2 py-0.5 rounded-full"
+                      className="text-xs bg-cafe-50 dark:bg-dark-border text-cafe-600 dark:text-cafe-300 px-2 py-0.5 rounded-full"
                     >
                       {note}
                     </span>
@@ -175,14 +175,14 @@ export function GuidePage() {
                 .join(", ");
 
               return (
-                <div key={level} className="pb-3 border-b border-cafe-50 last:border-b-0">
-                  <h4 className="font-bold text-cafe-700 mb-1">
+                <div key={level} className="pb-3 border-b border-cafe-50 dark:border-dark-border last:border-b-0">
+                  <h4 className="font-bold text-cafe-700 dark:text-cafe-300 mb-1">
                     {roastLabels[level]}
                   </h4>
-                  <p className="text-sm text-stone-600 mb-1">
+                  <p className="text-sm text-stone-600 dark:text-dark-text-muted mb-1">
                     {roastDescriptions[level]}
                   </p>
-                  <p className="text-xs text-stone-400">
+                  <p className="text-xs text-stone-400 dark:text-dark-text-muted">
                     {positiveTraits && (
                       <span className="text-green-600">{positiveTraits}</span>
                     )}
@@ -201,11 +201,11 @@ export function GuidePage() {
         <Accordion title="挽き目の違い">
           <div className="space-y-3 mt-4">
             {(Object.keys(grindLabels) as GrindSize[]).map((size) => (
-              <div key={size} className="pb-3 border-b border-cafe-50 last:border-b-0">
-                <h4 className="font-bold text-cafe-700 mb-1">
+              <div key={size} className="pb-3 border-b border-cafe-50 dark:border-dark-border last:border-b-0">
+                <h4 className="font-bold text-cafe-700 dark:text-cafe-300 mb-1">
                   {grindLabels[size]}
                 </h4>
-                <p className="text-sm text-stone-600">
+                <p className="text-sm text-stone-600 dark:text-dark-text-muted">
                   {grindDescriptions[size]}
                 </p>
               </div>
@@ -217,11 +217,11 @@ export function GuidePage() {
         <Accordion title="抽出方法の違い">
           <div className="space-y-3 mt-4">
             {(Object.keys(brewingLabels) as BrewingMethod[]).map((method) => (
-              <div key={method} className="pb-3 border-b border-cafe-50 last:border-b-0">
-                <h4 className="font-bold text-cafe-700 mb-1">
+              <div key={method} className="pb-3 border-b border-cafe-50 dark:border-dark-border last:border-b-0">
+                <h4 className="font-bold text-cafe-700 dark:text-cafe-300 mb-1">
                   {brewingLabels[method]}
                 </h4>
-                <p className="text-sm text-stone-600">
+                <p className="text-sm text-stone-600 dark:text-dark-text-muted">
                   {brewingDescriptions[method]}
                 </p>
               </div>

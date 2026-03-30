@@ -11,11 +11,11 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    "bg-cafe-700 text-white hover:bg-cafe-800 active:bg-cafe-900 shadow-md hover:shadow-lg",
+    "bg-cafe-700 text-white hover:bg-cafe-800 active:bg-cafe-900 shadow-md hover:shadow-lg dark:bg-cafe-600 dark:hover:bg-cafe-500 dark:active:bg-cafe-400",
   secondary:
-    "border-2 border-cafe-600 text-cafe-700 hover:bg-cafe-100 active:bg-cafe-200",
+    "border-2 border-cafe-600 text-cafe-700 hover:bg-cafe-100 active:bg-cafe-200 dark:border-cafe-500 dark:text-cafe-300 dark:hover:bg-dark-card dark:active:bg-dark-border",
   ghost:
-    "text-cafe-700 hover:bg-cafe-100 active:bg-cafe-200",
+    "text-cafe-700 hover:bg-cafe-100 active:bg-cafe-200 dark:text-cafe-300 dark:hover:bg-dark-card dark:active:bg-dark-border",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
@@ -35,7 +35,7 @@ export function Button({
     <button
       className={`
         rounded-xl font-medium transition-all duration-200
-        focus:outline-none focus:ring-2 focus:ring-cafe-400 focus:ring-offset-2
+        focus:outline-none focus:ring-2 focus:ring-cafe-400 focus:ring-offset-2 dark:focus:ring-offset-dark-bg
         disabled:opacity-50 disabled:cursor-not-allowed
         cursor-pointer
         ${variantClasses[variant]}
