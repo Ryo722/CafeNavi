@@ -11,6 +11,7 @@ import { coffeeProfiles } from "../data/coffeeProfiles";
 import { pairingByRoast } from "../data/pairingData";
 import { calculateUserFlavorProfile } from "./scoring";
 import { getTopRecommendations } from "./similarity";
+import { getWeightAdjustments } from "./feedbackStorage";
 
 /**
  * 推薦理由を日本語の自然文で生成する。
@@ -259,8 +260,11 @@ export function getFullRecommendation(
   // ユーザーの味覚プロファイルを算出
   const userProfile = calculateUserFlavorProfile(input);
 
+  // 保存された重みを読み込んで類似度計算に使用
+  const weights = getWeightAdjustments();
+
   // トップマッチを取得
-  const topMatches = getTopRecommendations(userProfile, profiles, 3);
+  const topMatches = getTopRecommendations(userProfile, profiles, 3, weights);
 
   // 各マッチに推薦理由を付与
   const topMatchesWithReasons = topMatches.map((match) => {

@@ -9,6 +9,7 @@ import type { DiagnosisRecord } from "../lib/storage";
 import { coffeeProfiles } from "../data/coffeeProfiles";
 import { Card } from "../components/ui/Card";
 import { Button } from "../components/ui/Button";
+import { resetWeights } from "../lib/feedbackStorage";
 
 function formatDate(iso: string): string {
   const d = new Date(iso);
@@ -29,6 +30,7 @@ export function HistoryPage() {
   const [history, setHistory] = useState<DiagnosisRecord[]>(
     getDiagnosisHistory,
   );
+  const [weightsReset, setWeightsReset] = useState(false);
 
   const handleDelete = useCallback((id: string) => {
     if (!window.confirm("この診断履歴を削除しますか？")) return;
@@ -43,6 +45,14 @@ export function HistoryPage() {
     setHistory([]);
   }, []);
 
+  const handleResetWeights = useCallback(() => {
+    if (!window.confirm("学習データをリセットしますか？診断の重み付けがデフォルトに戻ります。"))
+      return;
+    resetWeights();
+    setWeightsReset(true);
+    setTimeout(() => setWeightsReset(false), 3000);
+  }, []);
+
   const handleView = useCallback(
     (record: DiagnosisRecord) => {
       navigate("/result", {
@@ -52,6 +62,7 @@ export function HistoryPage() {
           input: record.input,
           mode: record.mode,
           fromHistory: true,
+          diagnosisId: record.id,
         },
       });
     },
@@ -148,6 +159,19 @@ export function HistoryPage() {
             >
               すべての履歴を削除
             </Button>
+            <Button
+              variant="ghost"
+              onClick={handleResetWeights}
+              className="w-full text-stone-500 hover:text-stone-700"
+              size="sm"
+            >
+              学習データをリセット
+            </Button>
+            {weightsReset && (
+              <p className="text-center text-xs text-cafe-600 animate-pulse">
+                学習データをリセットしました
+              </p>
+            )}
           </div>
         </>
       )}

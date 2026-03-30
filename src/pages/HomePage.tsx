@@ -89,6 +89,40 @@ export function HomePage() {
         </Card>
       </div>
 
+      {/* Bean Advisor card */}
+      <div className="space-y-4 mb-8">
+        <Card
+          className="cursor-pointer hover:shadow-md transition-shadow border-cafe-200 hover:border-cafe-400"
+          onClick={() => navigate("/bean-advisor")}
+          role="button"
+          tabIndex={0}
+          aria-label="お手持ちの豆を診断する"
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              navigate("/bean-advisor");
+            }
+          }}
+        >
+          <div className="flex items-start gap-4">
+            <div className="text-3xl" aria-hidden="true">
+              🫘
+            </div>
+            <div className="flex-1">
+              <h2 className="text-xl font-bold text-cafe-800 mb-1">
+                お手持ちの豆を診断
+              </h2>
+              <p className="text-sm text-stone-600 mb-3">
+                手持ちの豆の産地と焙煎度から、最適な淹れ方とお菓子を提案します。
+              </p>
+              <Button size="sm" variant="secondary" className="w-full">
+                豆診断を始める
+              </Button>
+            </div>
+          </div>
+        </Card>
+      </div>
+
       {/* Guide link */}
       <div className="text-center">
         <Link

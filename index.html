@@ -1,13 +1,39 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>cafenavi-temp</title>
+    <title>CafeNavi - コーヒー診断</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="/CafeNavi/manifest.json" />
+    <meta name="theme-color" content="#92400E" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <link rel="apple-touch-icon" href="/icon.svg" />
+
+    <!-- OGP -->
+    <meta property="og:title" content="CafeNavi - コーヒー診断" />
+    <meta property="og:description" content="あなたにぴったりのコーヒーを見つけよう" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://ryo722.github.io/CafeNavi/" />
+    <meta property="og:image" content="https://ryo722.github.io/CafeNavi/og-image.svg" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="CafeNavi - コーヒー診断" />
+    <meta name="twitter:description" content="あなたにぴったりのコーヒーを見つけよう" />
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("/CafeNavi/sw.js")
+            .catch(() => {});
+        });
+      }
+    </script>
   </body>
 </html>

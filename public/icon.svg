@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#FFF8F0"/>
+  <!-- Saucer -->
+  <ellipse cx="256" cy="380" rx="160" ry="30" fill="#D4A574" opacity="0.4"/>
+  <!-- Cup body -->
+  <path d="M128 200 C128 200 128 340 128 340 C128 380 180 400 256 400 C332 400 384 380 384 340 L384 200 Z" fill="#92400E"/>
+  <!-- Cup inner -->
+  <ellipse cx="256" cy="200" rx="128" ry="40" fill="#6B3410"/>
+  <!-- Coffee surface -->
+  <ellipse cx="256" cy="205" rx="112" ry="32" fill="#4A2508"/>
+  <!-- Handle -->
+  <path d="M384 240 C420 240 440 270 440 300 C440 330 420 360 384 360" fill="none" stroke="#92400E" stroke-width="24" stroke-linecap="round"/>
+  <!-- Steam -->
+  <path d="M200 160 Q210 130 200 100" fill="none" stroke="#92400E" stroke-width="6" stroke-linecap="round" opacity="0.3"/>
+  <path d="M256 150 Q266 115 256 80" fill="none" stroke="#92400E" stroke-width="6" stroke-linecap="round" opacity="0.3"/>
+  <path d="M312 160 Q322 130 312 100" fill="none" stroke="#92400E" stroke-width="6" stroke-linecap="round" opacity="0.3"/>
+</svg>

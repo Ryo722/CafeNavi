@@ -1,0 +1,16 @@
+{
+  "name": "CafeNavi - コーヒー診断",
+  "short_name": "CafeNavi",
+  "description": "あなたにぴったりのコーヒーを見つけよう",
+  "start_url": "/CafeNavi/",
+  "display": "standalone",
+  "background_color": "#FFF8F0",
+  "theme_color": "#92400E",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

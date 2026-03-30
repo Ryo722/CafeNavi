@@ -8,10 +8,19 @@ import { Button } from "../components/ui/Button";
 import { CoffeeCard } from "../components/result/CoffeeCard";
 import { BrewingRecommendation } from "../components/result/BrewingRecommendation";
 import { PairingList } from "../components/result/PairingList";
+import { ShareButtons } from "../components/result/ShareButtons";
 import { FlavorRadarChart } from "../components/charts/FlavorRadarChart";
 import { Card } from "../components/ui/Card";
 import { saveDiagnosis } from "../lib/storage";
 import type { DiagnosisRecord } from "../lib/storage";
+import { FeedbackForm } from "../components/result/FeedbackForm";
+import {
+  saveFeedback,
+  getFeedbackByDiagnosisId,
+  getWeightAdjustments,
+  saveWeightAdjustments,
+} from "../lib/feedbackStorage";
+import { adjustWeightsFromFeedback } from "../lib/learning";
 
 type LocationState = {
   result: RecommendationResult;
@@ -20,6 +29,8 @@ type LocationState = {
   mode?: UserMode;
   /** 履歴から閲覧する場合にセットされる */
   fromHistory?: boolean;
+  /** 履歴から閲覧する場合の診断ID */
+  diagnosisId?: string;
 };
 
 export function ResultPage() {
@@ -28,10 +39,16 @@ export function ResultPage() {
   const state = location.state as LocationState | null;
   const [saved, setSaved] = useState(false);
   const savedRef = useRef(false);
+  const [diagnosisId, setDiagnosisId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!state) {
       navigate("/", { replace: true });
+      return;
+    }
+    // 履歴から閲覧する場合、diagnosisId をセット
+    if (state.fromHistory && state.diagnosisId) {
+      setDiagnosisId(state.diagnosisId);
     }
   }, [state, navigate]);
 
@@ -40,8 +57,9 @@ export function ResultPage() {
     if (!state || state.fromHistory || savedRef.current) return;
     savedRef.current = true;
 
+    const id = String(Date.now());
     const record: DiagnosisRecord = {
-      id: String(Date.now()),
+      id,
       date: new Date().toISOString(),
       mode: state.mode ?? "beginner",
       input: state.input,
@@ -49,6 +67,7 @@ export function ResultPage() {
       userFlavorProfile: state.userProfile,
     };
     saveDiagnosis(record);
+    setDiagnosisId(id);
     setSaved(true);
 
     const timer = setTimeout(() => setSaved(false), 3000);
@@ -163,6 +182,54 @@ export function ResultPage() {
               ))}
             </div>
           </Card>
+        </section>
+      )}
+
+      {/* Share */}
+      {topCoffee && (
+        <section className="mb-8" aria-label="結果をシェア">
+          <Card>
+            <ShareButtons
+              coffeeName={topCoffee.nameJa}
+              score={result.topMatches[0].score}
+            />
+          </Card>
+        </section>
+      )}
+
+      {/* Feedback */}
+      {diagnosisId && (
+        <section className="mb-8" aria-label="フィードバック">
+          <FeedbackForm
+            diagnosisId={diagnosisId}
+            coffeeMatches={result.topMatches.map((match) => {
+              const coffee = coffeeProfiles.find((p) => p.id === match.coffeeId);
+              return {
+                coffeeId: match.coffeeId,
+                nameJa: coffee?.nameJa ?? match.coffeeId,
+              };
+            })}
+            existingFeedback={getFeedbackByDiagnosisId(diagnosisId)}
+            onSubmit={(feedback) => {
+              saveFeedback(feedback);
+              // 学習ロジック実行: 重みを更新
+              const currentWeights = getWeightAdjustments();
+              const record: DiagnosisRecord = {
+                id: diagnosisId,
+                date: new Date().toISOString(),
+                mode: state.mode ?? "beginner",
+                input: state.input,
+                result: state.result,
+                userFlavorProfile: state.userProfile,
+              };
+              const newWeights = adjustWeightsFromFeedback(
+                currentWeights,
+                feedback,
+                record,
+              );
+              saveWeightAdjustments(newWeights);
+            }}
+          />
         </section>
       )}
 
