@@ -15,9 +15,11 @@ const axisKeys: { key: keyof FlavorScores; labelKey: string }[] = [
   { key: "sweetness", labelKey: "flavor.sweetness" },
   { key: "body", labelKey: "flavor.body" },
   { key: "fruitiness", labelKey: "flavor.fruitiness" },
+  { key: "floral", labelKey: "flavor.floral" },
   { key: "nuttiness", labelKey: "flavor.nuttiness" },
   { key: "chocolaty", labelKey: "flavor.chocolaty" },
   { key: "roastiness", labelKey: "flavor.roastiness" },
+  { key: "cleanness", labelKey: "flavor.cleanness" },
 ];
 
 const MAX_VALUE = 10;
