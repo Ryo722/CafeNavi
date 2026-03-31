@@ -625,6 +625,18 @@ export const en: Translations = {
   "strategy.v1": "v1 (Legacy)",
   "strategy.v2": "v2 (New)",
 
+  // share
+  "share.title": "Share Your Results",
+  "share.xButton": "Share on X",
+  "share.lineButton": "Share on LINE",
+  "share.copyLink": "Copy Link",
+  "share.copied": "Copied!",
+  "share.nativeShare": "Share",
+  "share.saveImage": "📷 Save as Image",
+  "share.saving": "Saving...",
+  "share.saved": "Saved!",
+  "share.saveFailed": "Save failed",
+
   // feedback
   "feedback.surveyButton": "📝 Take a Survey",
   "feedback.surveyNote": "Takes 1-2 minutes",

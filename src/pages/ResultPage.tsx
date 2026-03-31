@@ -8,6 +8,8 @@ import { Button } from "../components/ui/Button";
 import { CoffeeCard } from "../components/result/CoffeeCard";
 import { BrewingRecommendation } from "../components/result/BrewingRecommendation";
 import { PairingList } from "../components/result/PairingList";
+import { ShareButtons } from "../components/result/ShareButtons";
+import { SaveAsImage } from "../components/result/SaveAsImage";
 import { FlavorRadarChart } from "../components/charts/FlavorRadarChart";
 import { Card } from "../components/ui/Card";
 import { PageTransition } from "../components/ui/PageTransition";
@@ -32,6 +34,7 @@ export function ResultPage() {
   const state = location.state as LocationState | null;
   const [saved, setSaved] = useState(false);
   const savedRef = useRef(false);
+  const captureRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!state) {
@@ -93,6 +96,9 @@ export function ResultPage() {
           </p>
         )}
       </div>
+
+      {/* Capture area start */}
+      <div ref={captureRef}>
 
       {/* Top matches */}
       <section className="space-y-4 mb-8" aria-label={t("result.sectionRecommended")}>
@@ -187,6 +193,20 @@ export function ResultPage() {
       <section className="mb-8" aria-label={t("result.sectionPairing")}>
         <PairingList pairings={result.pairingSuggestions} />
       </section>
+
+      </div>
+      {/* Capture area end */}
+
+      {/* Share section */}
+      <ShareButtons
+        coffeeName={topCoffee ? t(`coffee.${topCoffee.id}.name`) : ""}
+        score={result.topMatches[0]?.score ?? 0}
+      />
+
+      {/* Save as image */}
+      <div className="mb-8">
+        <SaveAsImage captureRef={captureRef} />
+      </div>
 
       {/* Avoid notes */}
       {result.avoidNotes.length > 0 && (
