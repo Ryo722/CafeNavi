@@ -626,6 +626,18 @@ export const ja: Translations = {
   "strategy.v1": "v1（旧）",
   "strategy.v2": "v2（新）",
 
+  // share
+  "share.title": "結果をシェアしよう",
+  "share.xButton": "Xでシェア",
+  "share.lineButton": "LINEでシェア",
+  "share.copyLink": "リンクをコピー",
+  "share.copied": "コピーしました",
+  "share.nativeShare": "共有",
+  "share.saveImage": "📷 結果を画像で保存",
+  "share.saving": "保存中...",
+  "share.saved": "保存しました！",
+  "share.saveFailed": "保存に失敗しました",
+
   // feedback
   "feedback.surveyButton": "📝 アンケートに回答する",
   "feedback.surveyNote": "1-2分で完了します",
